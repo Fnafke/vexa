@@ -3,8 +3,11 @@ package com.fnafke.vexa.services;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.fnafke.vexa.controllers.dto.AuthenticationResponse;
+import com.fnafke.vexa.models.Role;
 import com.fnafke.vexa.models.User;
 import com.fnafke.vexa.repositories.UserRepository;
 import com.fnafke.vexa.services.interfaces.UserService;
@@ -15,8 +18,16 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    @Autowired
+    private JwtService jwtService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    public UserServiceImpl(UserRepository userRepository, JwtService jwtService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.jwtService = jwtService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -51,9 +62,37 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User createUser(User user) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createUser'");
+    public AuthenticationResponse createAndAuthenticateUser(String username, String email, String password) {
+        if (existsByUsername(username)) {
+            throw new RuntimeException("Username already exists");
+        }
+        if (existsByEmail(email)) {
+            throw new RuntimeException("Email already exists");
+        }
+
+        User user = new User(username, email, passwordEncoder.encode(password), Role.USER);
+
+        userRepository.save(user);
+
+        return new AuthenticationResponse(
+                jwtService.generateToken(user),
+                user.getId(),
+                user.getUsername(),
+                "Successfully registered! Welcome " + user.getUsername());
+
+    }
+
+    public AuthenticationResponse authenticateUser(String email, String password) {
+        User user = findByEmail(email);
+
+        if (!this.passwordEncoder.matches(password, user.getPassword())) {
+            throw new RuntimeException("Invalid email or password");
+        }
+        return new AuthenticationResponse(
+                jwtService.generateToken(user),
+                user.getId(),
+                user.getUsername(),
+                "Successfully authenticated! Welcome " + user.getUsername());
     }
 
 }

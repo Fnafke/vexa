@@ -1,7 +1,13 @@
 package com.fnafke.vexa.models;
 
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,7 +20,7 @@ import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @Column(name = "id", nullable = false, unique = true)
@@ -25,7 +31,6 @@ public class User {
     private String username;
 
     @Column(name = "email", nullable = false, unique = true)
-    @Size(min = 3, max = 20, message = "Email must be between 3 and 20 characters long")
     @Email(message = "Email should be valid")
     private String email;
 
@@ -51,6 +56,11 @@ public class User {
         this.email = email;
         this.password = password;
         this.role = role;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
     public UUID getId() {
@@ -108,5 +118,4 @@ public class User {
     public void setRole(Role role) {
         this.role = role;
     }
-
 }
