@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.fnafke.vexa.controllers.dto.AuthenticationResponse;
 import com.fnafke.vexa.models.Role;
 import com.fnafke.vexa.models.User;
+import com.fnafke.vexa.models.exceptions.NotFoundException;
 import com.fnafke.vexa.repositories.UserRepository;
 import com.fnafke.vexa.services.interfaces.UserService;
 
@@ -33,21 +34,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findById(UUID id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+                .orElseThrow(() -> new NotFoundException("User not found with id: " + id));
         return user;
     }
 
     @Override
     public User findByUsername(String username) {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
+                .orElseThrow(() -> new NotFoundException("User not found with username: " + username));
         return user;
     }
 
     @Override
     public User findByEmail(String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+                .orElseThrow(() -> new NotFoundException("User not found with email: " + email));
         return user;
     }
 
