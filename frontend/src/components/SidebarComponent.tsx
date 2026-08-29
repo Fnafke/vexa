@@ -30,7 +30,9 @@ const SidebarComponent = () => {
     return (
         <Sidebar collapsible="icon" variant="sidebar">
             <SidebarHeader className="px-3 py-4">
-                <div className="flex items-center gap-3 rounded-xl bg-sidebar-accent/70 px-3 py-2.5">
+                <div className="flex items-center gap-3 rounded-xl bg-sidebar-accent/70 px-3 py-2.5 hover:bg-sidebar-accent/80 cursor-pointer"
+                    onClick={() => navigate("/")}
+                    >
                     <div className="flex size-9 items-center justify-center rounded-lg bg-sidebar-primary text-sm font-bold text-sidebar-primary-foreground">
                         V
                     </div>
