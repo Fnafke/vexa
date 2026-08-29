@@ -10,6 +10,7 @@ import LoginPage from './Pages/LoginPage'
 import SignupPage from './Pages/SignupPage'
 import { SidebarProvider } from './components/ui/sidebar'
 import { TooltipProvider } from './components/ui/tooltip'
+import { ThemeProvider } from './components/theme/ThemeProvider'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -25,13 +26,15 @@ const router = createBrowserRouter(
 )
 
 createRoot(document.getElementById('root')!).render(
-  <SidebarProvider>
-    <TooltipProvider>
-      <AuthProvider>
-        <StrictMode>
-          <RouterProvider router={router} />
-        </StrictMode>
-      </AuthProvider>
-    </TooltipProvider>
-  </SidebarProvider>
+  <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+    <SidebarProvider>
+      <TooltipProvider>
+        <AuthProvider>
+          <StrictMode>
+            <RouterProvider router={router} />
+          </StrictMode>
+        </AuthProvider>
+      </TooltipProvider>
+    </SidebarProvider>
+  </ThemeProvider>
 )

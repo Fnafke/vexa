@@ -15,6 +15,7 @@ import {
 import { LogOut, MessageCircle, UserRound } from "lucide-react";
 import { useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import CustomThemeToggle from "./theme/CustomThemeToggle";
 
 const SidebarComponent = () => {
     const authContext = useContext(AuthContext);
@@ -77,6 +78,9 @@ const SidebarComponent = () => {
 
             <SidebarFooter className="px-3 py-4">
                 <SidebarMenu>
+                    <SidebarMenuItem>
+                        <CustomThemeToggle />
+                    </SidebarMenuItem>
                     <SidebarMenuItem>
                         <SidebarMenuButton
                             className="text-destructive hover:bg-destructive/10 hover:text-destructive"
