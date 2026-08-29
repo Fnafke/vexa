@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -58,11 +59,11 @@ public class FriendshipsController {
 
     // POST Mappings
 
-    // /api/friendships/request/send?receiverUsername={receiverUsername}
+    // /api/friendships/request/send
     @PostMapping("/request/send")
     public ResponseEntity<FriendshipDto> sendFriendRequest(
             @AuthenticationPrincipal User currentUser,
-            @RequestParam(name = "receiverUsername", required = true) String receiverUsername) {
+            @RequestBody String receiverUsername) {
 
         FriendshipDto friendshipDto = FriendshipDto.fromFriendship(
                 this.friendshipService.sendFriendRequest(currentUser.getUsername(), receiverUsername));
@@ -70,11 +71,11 @@ public class FriendshipsController {
         return ResponseEntity.status(201).body(friendshipDto);
     }
 
-    // /api/friendships/request/accept?friendshipId={friendshipId}
+    // /api/friendships/request/accept
     @PostMapping("/request/accept")
     public ResponseEntity<FriendshipDto> acceptFriendRequest(
             @AuthenticationPrincipal User currentUser,
-            @RequestParam(name = "friendshipId", required = true) UUID friendshipId) {
+            @RequestBody UUID friendshipId) {
 
         FriendshipDto friendshipDto = FriendshipDto.fromFriendship(
                 this.friendshipService.acceptFriendRequest(friendshipId));
