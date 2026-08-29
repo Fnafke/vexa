@@ -1,10 +1,10 @@
-import { Sun } from "lucide-react";
+import { Check, Sun } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { SidebarMenuButton } from "../ui/sidebar";
 import { useTheme } from "./ThemeProvider";
 
 const CustomThemeToggle = () => {
-    const { setTheme } = useTheme();
+    const { theme, setTheme } = useTheme();
 
     return (
         <>
@@ -20,13 +20,13 @@ const CustomThemeToggle = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     <DropdownMenuItem onClick={() => setTheme("light")}>
-                    Light
+                    Light {theme === "light" && <Check />}
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => setTheme("dark")}>
-                    Dark
+                    Dark {theme === "dark" && <Check />}
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => setTheme("system")}>
-                    System
+                    System {theme === "system" && <Check />}
                     </DropdownMenuItem>
                 </DropdownMenuContent>
                 </DropdownMenu>
