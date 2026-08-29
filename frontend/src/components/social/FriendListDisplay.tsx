@@ -91,7 +91,7 @@ const FriendListDisplay = () => {
                             </div>
                             <div className="min-w-0">
                                 <p className="truncate text-sm font-semibold text-foreground">{
-                                    friend.requester.username === context?.user?.username ? friend.receiver.username : friend.requester.username
+                                    friend.requester.username === context?.user?.username ? friend.addressee.username : friend.requester.username
                                 }</p>
                                 <p className="text-xs text-muted-foreground">Friend</p>
                             </div>

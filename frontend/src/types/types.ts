@@ -33,7 +33,7 @@ export type PublicUser = {
 export type Friendship = {
     id: string;
     requester: PublicUser;
-    receiver: PublicUser;
+    addressee: PublicUser;
     status: FriendshipStatus;
     createdAt: Date;
 }
