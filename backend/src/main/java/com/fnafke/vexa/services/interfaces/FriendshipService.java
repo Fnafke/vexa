@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.fnafke.vexa.models.Friendship;
+import com.fnafke.vexa.models.exceptions.NotFoundException;
 
 /**
  * Service interface for managing friendships between users.
@@ -15,8 +16,9 @@ public interface FriendshipService {
      *
      * @param friendshipId the unique identifier of the friendship
      * @return the Friendship object if found, otherwise null
+     * @throws NotFoundException if the friendship is not found
      */
-    public Friendship getFriendshipById(UUID friendshipId);
+    public Friendship getFriendshipById(UUID friendshipId) throws NotFoundException;
 
     /**
      * Retrieves all friendships for a given user.
@@ -25,6 +27,15 @@ public interface FriendshipService {
      * @return a list of Friendship objects for the user
      */
     public List<Friendship> getFriendshipsByUserId(UUID userId);
+
+    /**
+     * Retrieves the friendship between two users, if it exists.
+     *
+     * @param userAId the unique identifier of the first user
+     * @param userBId the unique identifier of the second user
+     * @return the Friendship object if found, otherwise null
+     */
+    public Friendship getFriendshipBetweenUsers(UUID userAId, UUID userBId);
 
     /**
      * Sends a friend request from one user to another.
