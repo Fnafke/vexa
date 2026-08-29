@@ -29,6 +29,9 @@ public class AuthController {
         this.userService = userService;
     }
 
+    // POST Mappings
+
+    // /api/auth/signup - Sign up a new user and authenticate them
     @PostMapping("/signup")
     public ResponseEntity<AuthenticationResponse> signup(@RequestBody SignupRequest request,
             HttpServletResponse response) {
@@ -41,6 +44,7 @@ public class AuthController {
         return ResponseEntity.status(201).body(authResponse);
     }
 
+    // /api/auth/login - Authenticate an existing user
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest request,
             HttpServletResponse response) {
@@ -51,6 +55,7 @@ public class AuthController {
         return ResponseEntity.ok(authResponse);
     }
 
+    // /api/auth/logout - Log out the currently authenticated user
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(HttpServletResponse response) {
         ResponseCookie cookie = ResponseCookie.from("accessToken", "")

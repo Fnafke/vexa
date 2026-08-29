@@ -26,6 +26,7 @@ public class UsersController {
 
     // GET MAPPINGS
 
+    // /api/users/me - Get the currently authenticated user's information
     @GetMapping("/me")
     public ResponseEntity<UserDto> getCurrentUser(Authentication authentication) {
         String username = authentication.getName();
@@ -33,6 +34,7 @@ public class UsersController {
         return ResponseEntity.ok(userDto);
     }
 
+    // /api/users/{id} - Get a user's information by their ID
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUserById(@PathVariable UUID id) {
         try {
