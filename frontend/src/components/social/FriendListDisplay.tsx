@@ -1,12 +1,15 @@
 import { FriendshipService } from "@/services/FriendshipService";
 import type { FriendList, FriendshipStatus } from "@/types/types";
 import { UserRound } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 const FriendListDisplay = () => {
     const [friendsList, setFriendsList] = useState<FriendList | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState("");
+
+    const context = useContext(AuthContext);
 
     const fetchFriendsList = useCallback(async (status: FriendshipStatus, page?: number, size?: number) => {
         setIsLoading(true);
@@ -87,7 +90,9 @@ const FriendListDisplay = () => {
                                 <UserRound className="h-5 w-5" />
                             </div>
                             <div className="min-w-0">
-                                <p className="truncate text-sm font-semibold text-foreground">{friend.username}</p>
+                                <p className="truncate text-sm font-semibold text-foreground">{
+                                    friend.requester.username === context?.user?.username ? friend.receiver.username : friend.requester.username
+                                }</p>
                                 <p className="text-xs text-muted-foreground">Friend</p>
                             </div>
                         </li>

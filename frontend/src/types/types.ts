@@ -30,8 +30,16 @@ export type PublicUser = {
     createdAt: Date;
 }
 
+export type Friendship = {
+    id: string;
+    requester: PublicUser;
+    receiver: PublicUser;
+    status: FriendshipStatus;
+    createdAt: Date;
+}
+
 export type FriendList = {
-    friends: PublicUser[];
+    friends: Friendship[];
     page: number;
     pageSize: number;
     totalElements: number;
