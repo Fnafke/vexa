@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.fnafke.vexa.controllers.dto.BlockedListDto;
 import com.fnafke.vexa.controllers.dto.FriendsListDto;
+import com.fnafke.vexa.controllers.dto.FriendshipDto;
 import com.fnafke.vexa.controllers.dto.PublicUserDto;
 import com.fnafke.vexa.models.BlockedUser;
 import com.fnafke.vexa.models.Friendship;
@@ -74,13 +75,8 @@ public class FriendshipServiceImpl implements FriendshipService {
         PageRequest pageable = PageRequest.of(page, pageSize);
         Page<Friendship> friendshipPage = friendshipRepository.findAllByUserIdAndStatus(userId, status, pageable);
 
-        List<PublicUserDto> friends = friendshipPage.getContent().stream()
-                .map(f -> {
-                    User other = f.getRequester().getId().equals(userId)
-                            ? f.getAddressee()
-                            : f.getRequester();
-                    return PublicUserDto.fromUser(other);
-                })
+        List<FriendshipDto> friends = friendshipPage.getContent().stream()
+                .map(FriendshipDto::fromFriendship)
                 .toList();
 
         return new FriendsListDto(
