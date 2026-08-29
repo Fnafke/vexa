@@ -5,6 +5,8 @@ import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -29,6 +31,7 @@ public class Friendship {
     @JoinColumn(name = "addressee_id", nullable = false)
     private User addressee;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private FriendshipStatus status = FriendshipStatus.PENDING;
 
