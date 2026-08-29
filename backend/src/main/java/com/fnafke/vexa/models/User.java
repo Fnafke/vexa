@@ -14,6 +14,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
@@ -35,18 +37,28 @@ public class User implements UserDetails {
     private String email;
 
     @Column(name = "password", nullable = false)
-    @Size(min = 10, message = "Password must be between 10 and 100 characters long")
     private String password;
 
     @Column(name = "created_at", nullable = false)
-    private LocalDate createdAt = LocalDate.now();
+    private LocalDate createdAt;
 
     @Column(name = "updated_at", nullable = false)
-    private LocalDate updatedAt = LocalDate.now();
+    private LocalDate updatedAt;
 
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDate.now();
+        updatedAt = LocalDate.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDate.now();
+    }
 
     protected User() {
     }
@@ -118,4 +130,21 @@ public class User implements UserDetails {
     public void setRole(Role role) {
         this.role = role;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof User other)) {
+            return false;
+        }
+        return id != null && id.equals(other.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
+
 }
