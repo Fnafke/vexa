@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fnafke.vexa.controllers.dto.BlockedListDto;
+import com.fnafke.vexa.controllers.dto.FriendRequestDto;
 import com.fnafke.vexa.controllers.dto.FriendsListDto;
 import com.fnafke.vexa.controllers.dto.FriendshipDto;
 import com.fnafke.vexa.models.FriendshipStatus;
@@ -63,10 +64,11 @@ public class FriendshipsController {
     @PostMapping("/request/send")
     public ResponseEntity<FriendshipDto> sendFriendRequest(
             @AuthenticationPrincipal User currentUser,
-            @RequestBody String receiverUsername) {
+            @RequestBody FriendRequestDto friendRequestDto) {
 
         FriendshipDto friendshipDto = FriendshipDto.fromFriendship(
-                this.friendshipService.sendFriendRequest(currentUser.getUsername(), receiverUsername));
+                this.friendshipService.sendFriendRequest(currentUser.getUsername(),
+                        friendRequestDto.receiverUsername()));
 
         return ResponseEntity.status(201).body(friendshipDto);
     }
