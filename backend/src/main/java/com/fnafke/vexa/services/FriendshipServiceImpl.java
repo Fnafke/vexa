@@ -105,19 +105,19 @@ public class FriendshipServiceImpl implements FriendshipService {
     }
 
     @Override
-    public Friendship sendFriendRequest(UUID senderId, UUID receiverId) {
-        if (senderId.equals(receiverId)) {
+    public Friendship sendFriendRequest(String senderUsername, String receiverUsername) {
+        if (senderUsername.equals(receiverUsername)) {
             throw new IllegalArgumentException("Cannot send friend request to yourself.");
         }
 
-        User userA = userService.findById(senderId);
-        User userB = userService.findById(receiverId);
+        User userA = userService.findByUsername(senderUsername);
+        User userB = userService.findByUsername(receiverUsername);
 
         if (blockedUserService.isUserBlockedBy(userB, userA)) {
             throw new IllegalArgumentException("Cannot send friend request. You are blocked by this user.");
         }
 
-        Friendship existingFriendship = this.getFriendshipBetweenUsers(senderId, receiverId);
+        Friendship existingFriendship = this.getFriendshipBetweenUsers(userA.getId(), userB.getId());
 
         if (existingFriendship != null) {
 

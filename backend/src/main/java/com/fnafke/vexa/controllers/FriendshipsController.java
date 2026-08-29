@@ -58,14 +58,14 @@ public class FriendshipsController {
 
     // POST Mappings
 
-    // /api/friendships/request/send?receiverId={receiverId}
+    // /api/friendships/request/send?receiverUsername={receiverUsername}
     @PostMapping("/request/send")
     public ResponseEntity<FriendshipDto> sendFriendRequest(
             @AuthenticationPrincipal User currentUser,
-            @RequestParam(name = "receiverId", required = true) UUID receiverId) {
+            @RequestParam(name = "receiverUsername", required = true) String receiverUsername) {
 
         FriendshipDto friendshipDto = FriendshipDto.fromFriendship(
-                this.friendshipService.sendFriendRequest(currentUser.getId(), receiverId));
+                this.friendshipService.sendFriendRequest(currentUser.getUsername(), receiverUsername));
 
         return ResponseEntity.status(201).body(friendshipDto);
     }

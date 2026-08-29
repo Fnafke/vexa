@@ -67,11 +67,11 @@ public interface FriendshipService {
     /**
      * Sends a friend request from one user to another.
      *
-     * @param senderId   the unique identifier of the user sending the request
-     * @param receiverId the unique identifier of the user receiving the request
+     * @param senderUsername   the username of the user sending the request
+     * @param receiverUsername the username of the user receiving the request
      * @return the created Friendship object representing the friend request
      */
-    public Friendship sendFriendRequest(UUID senderId, UUID receiverId);
+    public Friendship sendFriendRequest(String senderUsername, String receiverUsername);
 
     /**
      * Accepts a friend request.
