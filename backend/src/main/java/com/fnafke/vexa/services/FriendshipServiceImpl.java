@@ -4,8 +4,12 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.fnafke.vexa.controllers.dto.FriendsListDto;
+import com.fnafke.vexa.controllers.dto.PublicUserDto;
 import com.fnafke.vexa.models.BlockedUser;
 import com.fnafke.vexa.models.Friendship;
 import com.fnafke.vexa.models.FriendshipStatus;
@@ -61,6 +65,29 @@ public class FriendshipServiceImpl implements FriendshipService {
         }
 
         return friendshipRepository.findBetweenUsers(userAId, userBId).orElse(null);
+    }
+
+    @Override
+    public FriendsListDto getFriendsListByUserIdAndStatus(UUID userId, FriendshipStatus status, int page,
+            int pageSize) {
+        PageRequest pageable = PageRequest.of(page, pageSize);
+        Page<Friendship> friendshipPage = friendshipRepository.findAllByUserIdAndStatus(userId, status, pageable);
+
+        List<PublicUserDto> friends = friendshipPage.getContent().stream()
+                .map(f -> {
+                    User other = f.getRequester().getId().equals(userId)
+                            ? f.getAddressee()
+                            : f.getRequester();
+                    return PublicUserDto.fromUser(other);
+                })
+                .toList();
+
+        return new FriendsListDto(
+                friends,
+                friendshipPage.getNumber(),
+                friendshipPage.getSize(),
+                friendshipPage.getTotalElements(),
+                friendshipPage.getTotalPages());
     }
 
     @Override
