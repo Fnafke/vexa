@@ -67,6 +67,18 @@ public class FriendshipsController {
         FriendshipDto friendshipDto = FriendshipDto.fromFriendship(
                 this.friendshipService.sendFriendRequest(currentUser.getId(), receiverId));
 
-        return ResponseEntity.ok(friendshipDto);
+        return ResponseEntity.status(201).body(friendshipDto);
+    }
+
+    // /api/friendships/request/accept?friendshipId={friendshipId}
+    @PostMapping("/request/accept")
+    public ResponseEntity<FriendshipDto> acceptFriendRequest(
+            @AuthenticationPrincipal User currentUser,
+            @RequestParam(name = "friendshipId", required = true) UUID friendshipId) {
+
+        FriendshipDto friendshipDto = FriendshipDto.fromFriendship(
+                this.friendshipService.acceptFriendRequest(friendshipId));
+
+        return ResponseEntity.status(201).body(friendshipDto);
     }
 }
