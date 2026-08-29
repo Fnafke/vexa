@@ -45,14 +45,20 @@ public class FriendshipServiceImpl implements FriendshipService {
 
     @Override
     public List<Friendship> getFriendshipsByUserId(UUID userId) {
-        User user = userService.findById(userId);
+        if (!userService.existsById(userId)) {
+            throw new NotFoundException("User not found with ID: " + userId);
+        }
         return friendshipRepository.findByUserId(userId);
     }
 
     @Override
     public Friendship getFriendshipBetweenUsers(UUID userAId, UUID userBId) {
-        User userA = userService.findById(userAId);
-        User userB = userService.findById(userBId);
+        if (!userService.existsById(userAId)) {
+            throw new NotFoundException("User A not found with ID: " + userAId);
+        }
+        if (!userService.existsById(userBId)) {
+            throw new NotFoundException("User B not found with ID: " + userBId);
+        }
 
         return friendshipRepository.findBetweenUsers(userAId, userBId).orElse(null);
     }

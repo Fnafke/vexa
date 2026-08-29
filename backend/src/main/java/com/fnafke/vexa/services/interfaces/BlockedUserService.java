@@ -1,7 +1,5 @@
 package com.fnafke.vexa.services.interfaces;
 
-import java.util.UUID;
-
 import com.fnafke.vexa.models.BlockedUser;
 import com.fnafke.vexa.models.User;
 

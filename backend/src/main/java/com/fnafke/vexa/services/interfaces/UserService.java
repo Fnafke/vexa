@@ -35,6 +35,14 @@ public interface UserService {
     public User findByEmail(String email);
 
     /**
+     * Check if a user exists by their ID.
+     *
+     * @param id the ID to check
+     * @return true if a user with the specified ID exists, false otherwise
+     */
+    public boolean existsById(UUID id);
+
+    /**
      * Check if a user exists by their username.
      *
      * @param username the username to check
