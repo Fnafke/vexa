@@ -3,6 +3,7 @@ package com.fnafke.vexa.services.interfaces;
 import java.util.List;
 import java.util.UUID;
 
+import com.fnafke.vexa.models.BlockedUser;
 import com.fnafke.vexa.models.Friendship;
 import com.fnafke.vexa.models.exceptions.NotFoundException;
 
@@ -68,4 +69,24 @@ public interface FriendshipService {
      * @param friendshipId the unique identifier of the friendship to remove
      */
     public void removeFriendship(UUID friendshipId);
+
+    /**
+     * Blocks a user.
+     *
+     * @param blockerId the unique identifier of the user who is blocking another
+     *                  user
+     * @param blockedId the unique identifier of the user to be blocked
+     * @return the BlockedUser object representing the blocked user
+     */
+    public BlockedUser blockUser(UUID blockerId, UUID blockedId);
+
+    /**
+     * Unblocks a user.
+     *
+     * @param blockerId the unique identifier of the user who is unblocking another
+     *                  user
+     * @param blockedId the unique identifier of the user to be unblocked
+     * @return a message indicating the result of the unblocking operation
+     */
+    public String unblockUser(UUID blockerId, UUID blockedId);
 }

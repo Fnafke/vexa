@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import com.fnafke.vexa.models.BlockedUser;
 import com.fnafke.vexa.models.Friendship;
 import com.fnafke.vexa.models.FriendshipStatus;
 import com.fnafke.vexa.models.User;
@@ -14,6 +16,7 @@ import com.fnafke.vexa.services.interfaces.BlockedUserService;
 import com.fnafke.vexa.services.interfaces.FriendshipService;
 import com.fnafke.vexa.services.interfaces.UserService;
 
+@Service
 public class FriendshipServiceImpl implements FriendshipService {
 
     @Autowired
@@ -59,7 +62,7 @@ public class FriendshipServiceImpl implements FriendshipService {
         User userA = userService.findById(senderId);
         User userB = userService.findById(receiverId);
 
-        if (blockedUserService.isUserBlockedBy(receiverId, senderId)) {
+        if (blockedUserService.isUserBlockedBy(userB, userA)) {
             throw new IllegalArgumentException("Cannot send friend request. You are blocked by this user.");
         }
 
@@ -111,5 +114,34 @@ public class FriendshipServiceImpl implements FriendshipService {
             throw new IllegalArgumentException("There is no friendship with the provided ID.");
         }
         friendshipRepository.delete(friendship);
+    }
+
+    @Override
+    public BlockedUser blockUser(UUID blockerId, UUID blockedId) {
+        User blocker = userService.findById(blockerId);
+        User blocked = userService.findById(blockedId);
+
+        if (blockedUserService.isUserBlockedBy(blocker, blocked)) {
+            throw new IllegalArgumentException("User is already blocked.");
+        }
+
+        Friendship existingFriendship = this.getFriendshipBetweenUsers(blockerId, blockedId);
+        if (existingFriendship != null) {
+            friendshipRepository.delete(existingFriendship);
+        }
+
+        return blockedUserService.blockUser(blocker, blocked);
+    }
+
+    @Override
+    public String unblockUser(UUID blockerId, UUID blockedId) {
+        User blocker = userService.findById(blockerId);
+        User blocked = userService.findById(blockedId);
+
+        if (!blockedUserService.isUserBlockedBy(blocker, blocked)) {
+            throw new IllegalArgumentException("User is not blocked.");
+        }
+
+        return blockedUserService.unblockUser(blocker, blocked);
     }
 }
