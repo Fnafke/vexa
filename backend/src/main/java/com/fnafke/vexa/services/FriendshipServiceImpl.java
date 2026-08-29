@@ -122,11 +122,22 @@ public class FriendshipServiceImpl implements FriendshipService {
         }
 
         Friendship existingFriendship = this.getFriendshipBetweenUsers(senderId, receiverId);
-        if (existingFriendship != null && existingFriendship.getStatus() == FriendshipStatus.ACCEPTED) {
-            throw new IllegalArgumentException("Friend request already accepted.");
-        }
-        if (existingFriendship != null && existingFriendship.getStatus() == FriendshipStatus.PENDING) {
-            throw new IllegalArgumentException("Friend request already sent.");
+
+        if (existingFriendship != null) {
+
+            switch (existingFriendship.getStatus()) {
+                case PENDING -> throw new IllegalArgumentException("Friend request is already pending.");
+                case ACCEPTED -> throw new IllegalArgumentException("You are already friends.");
+                case DECLINED -> {
+                    existingFriendship.setStatus(FriendshipStatus.PENDING);
+
+                    // Swap requester and addressee to allow the sender to send a new request
+                    existingFriendship.setRequester(userA);
+                    existingFriendship.setAddressee(userB);
+                    friendshipRepository.save(existingFriendship);
+                    return existingFriendship;
+                }
+            }
         }
 
         Friendship friendship = new Friendship(userA, userB);

@@ -1,15 +1,19 @@
 package com.fnafke.vexa.controllers;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fnafke.vexa.controllers.dto.BlockedListDto;
 import com.fnafke.vexa.controllers.dto.FriendsListDto;
+import com.fnafke.vexa.controllers.dto.FriendshipDto;
 import com.fnafke.vexa.models.FriendshipStatus;
 import com.fnafke.vexa.models.User;
 import com.fnafke.vexa.services.interfaces.FriendshipService;
@@ -53,4 +57,16 @@ public class FriendshipsController {
     }
 
     // POST Mappings
+
+    // /api/friendships/request/send?receiverId={receiverId}
+    @PostMapping("/request/send")
+    public ResponseEntity<FriendshipDto> sendFriendRequest(
+            @AuthenticationPrincipal User currentUser,
+            @RequestParam(name = "receiverId", required = true) UUID receiverId) {
+
+        FriendshipDto friendshipDto = FriendshipDto.fromFriendship(
+                this.friendshipService.sendFriendRequest(currentUser.getId(), receiverId));
+
+        return ResponseEntity.ok(friendshipDto);
+    }
 }
