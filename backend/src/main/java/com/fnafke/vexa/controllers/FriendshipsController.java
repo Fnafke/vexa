@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fnafke.vexa.controllers.dto.BlockedListDto;
 import com.fnafke.vexa.controllers.dto.FriendsListDto;
 import com.fnafke.vexa.models.FriendshipStatus;
 import com.fnafke.vexa.models.User;
@@ -39,6 +40,16 @@ public class FriendshipsController {
                 page,
                 size);
         return ResponseEntity.ok(friendsList);
+    }
+
+    // /api/friendships/blocked
+    @GetMapping("/blocked")
+    public ResponseEntity<BlockedListDto> getUserBlockedList(
+            @AuthenticationPrincipal User currentUser,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size) {
+        BlockedListDto blockedList = friendshipService.getBlockedListByUserId(currentUser.getId(), page, size);
+        return ResponseEntity.ok(blockedList);
     }
 
     // POST Mappings

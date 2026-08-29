@@ -1,6 +1,11 @@
 package com.fnafke.vexa.services;
 
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.fnafke.vexa.models.BlockedUser;
@@ -20,16 +25,17 @@ public class BlockedUserServiceImpl implements BlockedUserService {
     }
 
     @Override
+    public Page<BlockedUser> getBlockedUsersByBlockerId(UUID blockerId, Pageable pageable) {
+        return blockedUserRepository.findByBlockerId(blockerId, pageable);
+    }
+
+    @Override
     public boolean isUserBlockedBy(User blocker, User blocked) {
         return blockedUserRepository.existsByBlockerIdAndBlockedId(blocker.getId(), blocked.getId());
     }
 
     @Override
     public BlockedUser blockUser(User blocker, User blocked) {
-
-        if (isUserBlockedBy(blocker, blocked)) {
-            throw new IllegalArgumentException("User is already blocked.");
-        }
 
         BlockedUser blockedUser = new BlockedUser(blocker, blocked);
         blockedUserRepository.save(blockedUser);
@@ -39,9 +45,6 @@ public class BlockedUserServiceImpl implements BlockedUserService {
 
     @Override
     public String unblockUser(User blocker, User blocked) {
-        if (!isUserBlockedBy(blocker, blocked)) {
-            throw new IllegalArgumentException("User is not blocked.");
-        }
 
         BlockedUser blockedUser = blockedUserRepository.findBetweenUsers(blocker.getId(), blocked.getId())
                 .orElseThrow(() -> new IllegalArgumentException("User is not blocked."));

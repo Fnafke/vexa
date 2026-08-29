@@ -1,5 +1,11 @@
 package com.fnafke.vexa.services.interfaces;
 
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.fnafke.vexa.models.BlockedUser;
 import com.fnafke.vexa.models.User;
 
@@ -7,6 +13,16 @@ import com.fnafke.vexa.models.User;
  * Service interface for managing blocked users.
  */
 public interface BlockedUserService {
+
+    /**
+     * Retrieves a list of blocked users for a given blocker.
+     *
+     * @param blockerId the unique identifier of the user who has blocked others
+     * @param pageable  the pagination information
+     * @return a list of BlockedUser objects representing the blocked users
+     */
+    Page<BlockedUser> getBlockedUsersByBlockerId(UUID blockerId, Pageable pageable);
+
     /**
      * Checks if a user is blocked by another user.
      *

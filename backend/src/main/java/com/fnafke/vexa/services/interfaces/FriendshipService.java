@@ -3,6 +3,7 @@ package com.fnafke.vexa.services.interfaces;
 import java.util.List;
 import java.util.UUID;
 
+import com.fnafke.vexa.controllers.dto.BlockedListDto;
 import com.fnafke.vexa.controllers.dto.FriendsListDto;
 import com.fnafke.vexa.models.BlockedUser;
 import com.fnafke.vexa.models.Friendship;
@@ -51,6 +52,17 @@ public interface FriendshipService {
      *         information
      */
     public FriendsListDto getFriendsListByUserIdAndStatus(UUID userId, FriendshipStatus status, int page, int pageSize);
+
+    /**
+     * Retrieves a list of blocked users for a given user.
+     *
+     * @param userId   the unique identifier of the user
+     * @param page     the page number
+     * @param pageSize the number of items per page
+     * @return a BlockedListDto containing the blocked users and pagination
+     *         information
+     */
+    public BlockedListDto getBlockedListByUserId(UUID userId, int page, int pageSize);
 
     /**
      * Sends a friend request from one user to another.

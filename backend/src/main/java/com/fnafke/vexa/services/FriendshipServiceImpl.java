@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.fnafke.vexa.controllers.dto.BlockedListDto;
 import com.fnafke.vexa.controllers.dto.FriendsListDto;
 import com.fnafke.vexa.controllers.dto.PublicUserDto;
 import com.fnafke.vexa.models.BlockedUser;
@@ -91,7 +92,28 @@ public class FriendshipServiceImpl implements FriendshipService {
     }
 
     @Override
+    public BlockedListDto getBlockedListByUserId(UUID userId, int page, int pageSize) {
+        PageRequest pageable = PageRequest.of(page, pageSize);
+        Page<BlockedUser> blockedUsers = blockedUserService.getBlockedUsersByBlockerId(userId, pageable);
+
+        List<PublicUserDto> blocks = blockedUsers.getContent().stream()
+                .map(b -> PublicUserDto.fromUser(b.getBlocked()))
+                .toList();
+
+        return new BlockedListDto(
+                blocks,
+                page,
+                pageSize,
+                blockedUsers.getTotalElements(),
+                blockedUsers.getTotalPages());
+    }
+
+    @Override
     public Friendship sendFriendRequest(UUID senderId, UUID receiverId) {
+        if (senderId.equals(receiverId)) {
+            throw new IllegalArgumentException("Cannot send friend request to yourself.");
+        }
+
         User userA = userService.findById(senderId);
         User userB = userService.findById(receiverId);
 
@@ -151,6 +173,10 @@ public class FriendshipServiceImpl implements FriendshipService {
 
     @Override
     public BlockedUser blockUser(UUID blockerId, UUID blockedId) {
+        if (blockerId.equals(blockedId)) {
+            throw new IllegalArgumentException("Cannot block yourself.");
+        }
+
         User blocker = userService.findById(blockerId);
         User blocked = userService.findById(blockedId);
 
@@ -168,6 +194,10 @@ public class FriendshipServiceImpl implements FriendshipService {
 
     @Override
     public String unblockUser(UUID blockerId, UUID blockedId) {
+        if (blockerId.equals(blockedId)) {
+            throw new IllegalArgumentException("Cannot unblock yourself.");
+        }
+
         User blocker = userService.findById(blockerId);
         User blocked = userService.findById(blockedId);
 
