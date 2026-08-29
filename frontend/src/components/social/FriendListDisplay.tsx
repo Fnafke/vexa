@@ -1,11 +1,19 @@
 import { FriendshipService } from "@/services/FriendshipService";
 import type { FriendList, FriendshipStatus } from "@/types/types";
-import { UserRound } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Clock, UserRound } from "lucide-react";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 
-const FriendListDisplay = () => {
+type FriendListDisplayProps = {
+    className?: string;
+    fullHeight?: boolean;
+}
+
+const FriendListDisplay = ({ className, fullHeight = false }: FriendListDisplayProps) => {
     const [friendsList, setFriendsList] = useState<FriendList | null>(null);
+    const [activeStatus, setActiveStatus] = useState<Extract<FriendshipStatus, "ACCEPTED" | "PENDING">>("ACCEPTED");
     const [isLoading, setIsLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState("");
 
@@ -33,25 +41,54 @@ const FriendListDisplay = () => {
     }, []);
 
     useEffect(() => {
-        fetchFriendsList("ACCEPTED");
-    }, [fetchFriendsList]);
+        fetchFriendsList(activeStatus);
+    }, [activeStatus, fetchFriendsList]);
 
     const friends = friendsList?.friends ?? [];
+    const isPendingView = activeStatus === "PENDING";
+    const title = isPendingView ? "Pending requests" : "Friends";
+    const description = friendsList
+        ? `${friendsList.totalElements} ${isPendingView ? "pending" : "connected"}`
+        : isPendingView ? "Friend requests waiting for a response" : "Your accepted friends";
 
     return (
-        <section className="w-full max-w-md rounded-2xl border border-border bg-card p-5 shadow-[0_12px_36px_-18px_rgba(15,23,42,0.22)]">
-            <div className="mb-4 flex items-center justify-between gap-3">
+        <section
+            className={cn(
+                "flex w-full flex-col rounded-2xl border border-border bg-card p-5 shadow-[0_12px_36px_-18px_rgba(15,23,42,0.22)]",
+                fullHeight ? "h-full min-h-0" : "max-w-md",
+                className
+            )}
+        >
+            <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                    <h2 className="text-lg font-semibold tracking-tight text-foreground">Friends</h2>
+                    <h2 className="text-lg font-semibold tracking-tight text-foreground">{title}</h2>
                     <p className="text-sm text-muted-foreground">
-                        {friendsList ? `${friendsList.totalElements} connected` : "Your accepted friends"}
+                        {description}
                     </p>
+                </div>
+                <div className="grid grid-cols-2 gap-2 rounded-2xl bg-muted/50 p-1">
+                    <Button
+                        onClick={() => setActiveStatus("ACCEPTED")}
+                        size="sm"
+                        type="button"
+                        variant={activeStatus === "ACCEPTED" ? "default" : "ghost"}
+                    >
+                        Friends
+                    </Button>
+                    <Button
+                        onClick={() => setActiveStatus("PENDING")}
+                        size="sm"
+                        type="button"
+                        variant={activeStatus === "PENDING" ? "default" : "ghost"}
+                    >
+                        Pending
+                    </Button>
                 </div>
             </div>
 
             {isLoading && (
-                <div className="space-y-3">
-                    {[1, 2, 3].map((item) => (
+                <div className={cn("space-y-3", fullHeight && "min-h-0 flex-1 overflow-auto")}>
+                    {[1, 2, 3, 4, 5].map((item) => (
                         <div key={item} className="flex items-center gap-3 rounded-lg border border-border bg-muted/30 p-3">
                             <div className="h-10 w-10 animate-pulse rounded-full bg-muted" />
                             <div className="space-y-2">
@@ -70,17 +107,21 @@ const FriendListDisplay = () => {
             )}
 
             {!isLoading && !errorMessage && friends.length === 0 && (
-                <div className="rounded-lg border border-dashed border-border bg-muted/20 px-4 py-6 text-center">
+                <div className={cn("rounded-lg border border-dashed border-border bg-muted/20 px-4 py-6 text-center", fullHeight && "flex min-h-0 flex-1 flex-col items-center justify-center")}>
                     <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-primary/10 text-primary">
-                        <UserRound className="h-5 w-5" />
+                        {isPendingView ? <Clock className="h-5 w-5" /> : <UserRound className="h-5 w-5" />}
                     </div>
-                    <p className="text-sm font-medium text-foreground">No friends yet</p>
-                    <p className="mt-1 text-sm text-muted-foreground">Accepted friends will appear here.</p>
+                    <p className="text-sm font-medium text-foreground">
+                        {isPendingView ? "No pending requests" : "No friends yet"}
+                    </p>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                        {isPendingView ? "Pending friend requests will appear here." : "Accepted friends will appear here."}
+                    </p>
                 </div>
             )}
 
             {!isLoading && !errorMessage && friends.length > 0 && (
-                <ul className="space-y-2">
+                <ul className={cn("space-y-2", fullHeight && "min-h-0 flex-1 overflow-auto pr-1")}>
                     {friends.map((friend) => (
                         <li
                             key={friend.id}
@@ -93,7 +134,11 @@ const FriendListDisplay = () => {
                                 <p className="truncate text-sm font-semibold text-foreground">{
                                     friend.requester.username === context?.user?.username ? friend.addressee.username : friend.requester.username
                                 }</p>
-                                <p className="text-xs text-muted-foreground">Friend</p>
+                                <p className="text-xs text-muted-foreground">
+                                    {isPendingView
+                                        ? friend.requester.username === context?.user?.username ? "Request sent" : "Request received"
+                                        : "Friend"}
+                                </p>
                             </div>
                         </li>
                     ))}
