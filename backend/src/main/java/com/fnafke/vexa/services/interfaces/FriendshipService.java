@@ -50,4 +50,11 @@ public interface FriendshipService {
      * @return the updated Friendship object with status set to DECLINED
      */
     public Friendship declineFriendRequest(UUID friendshipId);
+
+    /**
+     * Removes a friendship between two users.
+     *
+     * @param friendshipId the unique identifier of the friendship to remove
+     */
+    public void removeFriendship(UUID friendshipId);
 }
