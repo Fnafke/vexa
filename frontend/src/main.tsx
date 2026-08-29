@@ -8,6 +8,8 @@ import HomePage from './Pages/HomePage'
 import NotFoundPage from './Pages/NotFoundPage'
 import LoginPage from './Pages/LoginPage'
 import SignupPage from './Pages/SignupPage'
+import { SidebarProvider } from './components/ui/sidebar'
+import { TooltipProvider } from './components/ui/tooltip'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,9 +25,13 @@ const router = createBrowserRouter(
 )
 
 createRoot(document.getElementById('root')!).render(
-  <AuthProvider>
-    <StrictMode>
-      <RouterProvider router={router} />
-    </StrictMode>
-  </AuthProvider>
+  <SidebarProvider>
+    <TooltipProvider>
+      <AuthProvider>
+        <StrictMode>
+          <RouterProvider router={router} />
+        </StrictMode>
+      </AuthProvider>
+    </TooltipProvider>
+  </SidebarProvider>
 )
