@@ -30,4 +30,14 @@ export type PublicUser = {
     createdAt: Date;
 }
 
+export type FriendList = {
+    friends: PublicUser[];
+    page: number;
+    pageSize: number;
+    totalElements: number;
+    totalPages: number;
+}
+
 export type Role = "USER" | "ADMIN"
+
+export type FriendshipStatus = "PENDING" | "ACCEPTED" | "DECLINED"
