@@ -7,7 +7,7 @@ const fetchCurrentUser = async (): Promise<Response | null> => {
         return response;
     } catch (error) {
         console.error("Error fetching current user:", error);
-        return null;
+        throw error;
     }
 };
 

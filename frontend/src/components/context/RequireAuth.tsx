@@ -1,13 +1,14 @@
 import { useContext } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { AuthContext } from "./AuthContext";
+import { PageSpinner } from "../PageSpinner";
 
 export const RequireAuth = () => {
     const context = useContext(AuthContext);
     const location = useLocation();
 
     if (context && context.isLoading) {
-        return <div>Loading...</div>;
+        return <PageSpinner />;
     }
 
     if (!context || !context.user) {

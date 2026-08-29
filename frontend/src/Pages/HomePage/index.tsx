@@ -1,6 +1,8 @@
 const HomePage = () => {
     return (
-        <></>
+        <>
+            <title>Vexa - Home</title>
+        </>
     )
 }
 

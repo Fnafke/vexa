@@ -10,9 +10,10 @@ const signup = async (userData: SignupRequest) => {
             credentials: "include",
             body: JSON.stringify(userData)
         });
-        return await response.json();
+        return response;
     } catch (error) {
         console.error("Error during signup:", error);
+        throw error;
     }
 }
 
@@ -30,6 +31,7 @@ const login = async (userData: AuthenticationRequest) => {
         return response;
     } catch (error) {
         console.error("Error during login:", error);
+        throw error;
     }
 }
 
@@ -42,6 +44,7 @@ const logout = async () => {
         return response;
     } catch (error) {
         console.error("Error during logout:", error);
+        throw error;
     }
 }
 

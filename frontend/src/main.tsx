@@ -6,10 +6,14 @@ import { AuthProvider } from './components/context/AuthProvider'
 import { RequireAuth } from './components/context/RequireAuth'
 import HomePage from './Pages/HomePage'
 import NotFoundPage from './Pages/NotFoundPage'
+import LoginPage from './Pages/LoginPage'
+import SignupPage from './Pages/SignupPage'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/signup" element={<SignupPage />} />
       <Route element={<RequireAuth />}>
         <Route path="/" element={<HomePage />} />
         <Route path="*" element={<NotFoundPage />} />
