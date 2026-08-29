@@ -16,6 +16,24 @@ const getFriendListByStatus = async (status: FriendshipStatus, page?: number, si
     }
 }
 
+const sendFriendRequest = async (receiverUsername: string): Promise<Response> => {
+    try {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/friendships/request/send?receiverUsername=${receiverUsername}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({ receiverUsername }),
+        })
+        return response;
+    } catch (error) {
+        console.error("Error sending friend request:", error)
+        throw error
+    }
+}
+
 export const FriendshipService = {
-    getFriendListByStatus
+    getFriendListByStatus,
+    sendFriendRequest,
 }
