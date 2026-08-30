@@ -35,12 +35,14 @@ const FriendListItem = ({ friend, currentUsername, label, updatedAt, onAccept, o
                         <Button
                             className="text-xs text-green-500 hover:text-green-600 cursor-pointer"
                             onClick={onAccept}
+                            variant="secondary"
                         >
                             Accept
                         </Button>
                         <Button
                             className="text-xs text-red-500 hover:text-red-600 cursor-pointer"
                             onClick={onDecline}
+                            variant="destructive"
                         >
                             Decline
                         </Button>
@@ -49,8 +51,9 @@ const FriendListItem = ({ friend, currentUsername, label, updatedAt, onAccept, o
                 {onCancel && (
                     <div className="mt-2">
                         <Button
-                            className="text-xs text-gray-500 hover:text-gray-600 cursor-pointer"
+                            className="text-xs text-red-500 hover:text-red-600 cursor-pointer"
                             onClick={onCancel}
+                            variant="destructive"
                         >
                             Cancel
                         </Button>
