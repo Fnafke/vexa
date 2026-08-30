@@ -1,6 +1,6 @@
 import type { Friendship } from "@/types/types";
 import { parseInstant, timeAgo } from "@/utils/utils";
-import { UserRound } from "lucide-react";
+import { MessageCircle, UserRound } from "lucide-react";
 import { Button } from "../ui/button";
 
 type FriendListItemProps = {
@@ -12,9 +12,11 @@ type FriendListItemProps = {
     onDecline?: () => void;
     onCancel?: () => void;
     onRemove?: () => void;
+    onStartChat?: () => void;
+    isStartingChat?: boolean;
 }
 
-const FriendListItem = ({ friend, currentUsername, label, updatedAt, onAccept, onDecline, onCancel, onRemove }: FriendListItemProps) => {
+const FriendListItem = ({ friend, currentUsername, label, updatedAt, onAccept, onDecline, onCancel, onRemove, onStartChat, isStartingChat = false }: FriendListItemProps) => {
     const displayName = friend.requester.username === currentUsername
         ? friend.addressee.username
         : friend.requester.username;
@@ -60,15 +62,29 @@ const FriendListItem = ({ friend, currentUsername, label, updatedAt, onAccept, o
                         </Button>
                     </div>
                 )}
-                {onRemove && (
-                    <div className="mt-2">
-                        <Button
-                            className="text-xs text-red-500 hover:text-red-600 cursor-pointer"
-                            onClick={onRemove}
-                            variant="destructive"
-                        >
-                            Remove
-                        </Button>
+                {(onStartChat || onRemove) && (
+                    <div className="mt-2 flex flex-wrap gap-2">
+                        {onStartChat && (
+                            <Button
+                                className="h-8 gap-2 text-xs cursor-pointer"
+                                disabled={isStartingChat}
+                                onClick={onStartChat}
+                                variant="secondary"
+                            >
+                                <MessageCircle className="h-3.5 w-3.5" />
+                                {isStartingChat ? "Opening..." : "Message"}
+                            </Button>
+                        )}
+                        {onRemove && (
+                            <Button
+                                className="text-xs text-red-500 hover:text-red-600 cursor-pointer"
+                                disabled={isStartingChat}
+                                onClick={onRemove}
+                                variant="destructive"
+                            >
+                                Remove
+                            </Button>
+                        )}
                     </div>
                 )}
             </div>

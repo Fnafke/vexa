@@ -1,11 +1,13 @@
+import { DirectChatService } from "@/services/DirectChatService";
 import { FriendshipService } from "@/services/FriendshipService";
-import type { FriendList, FriendshipStatus } from "@/types/types";
+import type { DirectChat, FriendList, Friendship, FriendshipStatus } from "@/types/types";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Clock, UserRound } from "lucide-react";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import FriendListItem from "./FriendListItem";
+import { useNavigate } from "react-router-dom";
 
 type FriendListDisplayProps = {
     className?: string;
@@ -17,8 +19,10 @@ const FriendListDisplay = ({ className, fullHeight = false }: FriendListDisplayP
     const [activeStatus, setActiveStatus] = useState<Extract<FriendshipStatus, "ACCEPTED" | "PENDING">>("ACCEPTED");
     const [isLoading, setIsLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState("");
+    const [startingChatId, setStartingChatId] = useState<string | null>(null);
 
     const context = useContext(AuthContext);
+    const navigate = useNavigate();
 
     const fetchFriendsList = useCallback(async (status: FriendshipStatus, page?: number, size?: number) => {
         setIsLoading(true);
@@ -83,6 +87,34 @@ const FriendListDisplay = ({ className, fullHeight = false }: FriendListDisplayP
         } catch (error) {
             console.error("Error removing friend:", error);
             setErrorMessage("Something went wrong while removing the friend.");
+        }
+    }
+
+    const getFriendUser = (friendship: Friendship) => {
+        return friendship.requester.username === context?.user?.username
+            ? friendship.addressee
+            : friendship.requester;
+    }
+
+    const handleStartChat = async (friendship: Friendship) => {
+        const friendUser = getFriendUser(friendship);
+        setStartingChatId(friendship.id);
+        setErrorMessage("");
+
+        try {
+            const response = await DirectChatService.createDirectChat(friendUser.id);
+            if (response.ok) {
+                const directChat: DirectChat = await response.json();
+                navigate(`/direct-messages/${directChat.id}`);
+            } else {
+                console.error("Failed to create direct chat:", response.statusText);
+                setErrorMessage("Could not start a chat right now.");
+            }
+        } catch (error) {
+            console.error("Error creating direct chat:", error);
+            setErrorMessage("Something went wrong while starting the chat.");
+        } finally {
+            setStartingChatId(null);
         }
     }
 
@@ -183,6 +215,8 @@ const FriendListDisplay = ({ className, fullHeight = false }: FriendListDisplayP
                             label="Friend"
                             updatedAt={friend.updatedAt}
                             onRemove={() => handleRemoveFriend(friend.id)}
+                            onStartChat={() => handleStartChat(friend)}
+                            isStartingChat={startingChatId === friend.id}
                         />
                     ))}
                 </ul>
