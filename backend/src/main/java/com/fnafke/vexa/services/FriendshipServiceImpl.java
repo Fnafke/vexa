@@ -8,10 +8,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import com.fnafke.vexa.controllers.dto.BlockedListDto;
-import com.fnafke.vexa.controllers.dto.FriendsListDto;
-import com.fnafke.vexa.controllers.dto.FriendshipDto;
-import com.fnafke.vexa.controllers.dto.PublicUserDto;
+import com.fnafke.vexa.controllers.dto.blocked_user.BlockedListDto;
+import com.fnafke.vexa.controllers.dto.friendship.FriendsListDto;
+import com.fnafke.vexa.controllers.dto.friendship.FriendshipDto;
+import com.fnafke.vexa.controllers.dto.user.PublicUserDto;
 import com.fnafke.vexa.models.BlockedUser;
 import com.fnafke.vexa.models.Friendship;
 import com.fnafke.vexa.models.FriendshipStatus;

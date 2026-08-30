@@ -2,7 +2,7 @@ package com.fnafke.vexa.services.interfaces;
 
 import java.util.UUID;
 
-import com.fnafke.vexa.controllers.dto.AuthenticationResponse;
+import com.fnafke.vexa.controllers.dto.auth.AuthenticationResponse;
 import com.fnafke.vexa.models.User;
 
 /**

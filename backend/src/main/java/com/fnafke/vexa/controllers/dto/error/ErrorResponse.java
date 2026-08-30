@@ -1,4 +1,4 @@
-package com.fnafke.vexa.controllers.dto;
+package com.fnafke.vexa.controllers.dto.error;
 
 public record ErrorResponse(String message) {
 }

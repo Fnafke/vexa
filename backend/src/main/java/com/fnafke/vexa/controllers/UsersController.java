@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fnafke.vexa.controllers.dto.UserDto;
+import com.fnafke.vexa.controllers.dto.user.UserDto;
 import com.fnafke.vexa.models.User;
 import com.fnafke.vexa.services.interfaces.UserService;
 

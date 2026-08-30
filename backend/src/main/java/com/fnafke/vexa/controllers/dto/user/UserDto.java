@@ -1,4 +1,4 @@
-package com.fnafke.vexa.controllers.dto;
+package com.fnafke.vexa.controllers.dto.user;
 
 import java.time.Instant;
 import java.util.UUID;

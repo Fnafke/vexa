@@ -1,4 +1,4 @@
-package com.fnafke.vexa.controllers.dto;
+package com.fnafke.vexa.controllers.dto.friendship;
 
 import java.util.UUID;
 

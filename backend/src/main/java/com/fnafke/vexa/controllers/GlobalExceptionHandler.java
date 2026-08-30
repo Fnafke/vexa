@@ -8,7 +8,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.fnafke.vexa.controllers.dto.ErrorResponse;
+import com.fnafke.vexa.controllers.dto.error.ErrorResponse;
 import com.fnafke.vexa.models.exceptions.NotFoundException;
 
 @RestControllerAdvice

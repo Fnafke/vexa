@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.fnafke.vexa.controllers.dto.AuthenticationResponse;
+import com.fnafke.vexa.controllers.dto.auth.AuthenticationResponse;
 import com.fnafke.vexa.models.Role;
 import com.fnafke.vexa.models.User;
 import com.fnafke.vexa.models.exceptions.NotFoundException;

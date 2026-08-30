@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fnafke.vexa.controllers.dto.AuthenticationRequest;
-import com.fnafke.vexa.controllers.dto.AuthenticationResponse;
-import com.fnafke.vexa.controllers.dto.SignupRequest;
+import com.fnafke.vexa.controllers.dto.auth.AuthenticationRequest;
+import com.fnafke.vexa.controllers.dto.auth.AuthenticationResponse;
+import com.fnafke.vexa.controllers.dto.auth.SignupRequest;
 import com.fnafke.vexa.services.interfaces.UserService;
 
 import jakarta.servlet.http.HttpServletResponse;

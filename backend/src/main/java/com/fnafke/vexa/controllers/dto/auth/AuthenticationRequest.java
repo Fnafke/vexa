@@ -1,4 +1,4 @@
-package com.fnafke.vexa.controllers.dto;
+package com.fnafke.vexa.controllers.dto.auth;
 
 public record AuthenticationRequest(String email, String password) {
 

@@ -1,8 +1,9 @@
-package com.fnafke.vexa.controllers.dto;
+package com.fnafke.vexa.controllers.dto.friendship;
 
 import java.time.Instant;
 import java.util.UUID;
 
+import com.fnafke.vexa.controllers.dto.user.PublicUserDto;
 import com.fnafke.vexa.models.Friendship;
 import com.fnafke.vexa.models.FriendshipStatus;
 

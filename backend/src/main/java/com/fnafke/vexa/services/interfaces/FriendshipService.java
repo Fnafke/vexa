@@ -3,8 +3,8 @@ package com.fnafke.vexa.services.interfaces;
 import java.util.List;
 import java.util.UUID;
 
-import com.fnafke.vexa.controllers.dto.BlockedListDto;
-import com.fnafke.vexa.controllers.dto.FriendsListDto;
+import com.fnafke.vexa.controllers.dto.blocked_user.BlockedListDto;
+import com.fnafke.vexa.controllers.dto.friendship.FriendsListDto;
 import com.fnafke.vexa.models.BlockedUser;
 import com.fnafke.vexa.models.Friendship;
 import com.fnafke.vexa.models.FriendshipStatus;

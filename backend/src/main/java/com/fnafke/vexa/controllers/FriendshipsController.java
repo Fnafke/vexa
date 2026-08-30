@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fnafke.vexa.controllers.dto.AcceptFriendRequestDto;
-import com.fnafke.vexa.controllers.dto.BlockedListDto;
-import com.fnafke.vexa.controllers.dto.DeclineFriendRequestDto;
-import com.fnafke.vexa.controllers.dto.FriendRequestDto;
-import com.fnafke.vexa.controllers.dto.FriendsListDto;
-import com.fnafke.vexa.controllers.dto.FriendshipDto;
+import com.fnafke.vexa.controllers.dto.blocked_user.BlockedListDto;
+import com.fnafke.vexa.controllers.dto.friendship.AcceptFriendRequestDto;
+import com.fnafke.vexa.controllers.dto.friendship.DeclineFriendRequestDto;
+import com.fnafke.vexa.controllers.dto.friendship.FriendRequestDto;
+import com.fnafke.vexa.controllers.dto.friendship.FriendsListDto;
+import com.fnafke.vexa.controllers.dto.friendship.FriendshipDto;
 import com.fnafke.vexa.models.FriendshipStatus;
 import com.fnafke.vexa.models.User;
 import com.fnafke.vexa.services.interfaces.FriendshipService;
