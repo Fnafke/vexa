@@ -84,4 +84,16 @@ public class FriendshipsController {
 
         return ResponseEntity.status(201).body(friendshipDto);
     }
+
+    // /api/friendships/request/decline
+    @PostMapping("/request/decline")
+    public ResponseEntity<FriendshipDto> declineFriendRequest(
+            @AuthenticationPrincipal User currentUser,
+            @RequestBody UUID friendshipId) {
+
+        FriendshipDto friendshipDto = FriendshipDto.fromFriendship(
+                this.friendshipService.declineFriendRequest(friendshipId));
+
+        return ResponseEntity.status(201).body(friendshipDto);
+    }
 }
