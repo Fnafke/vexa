@@ -12,7 +12,7 @@ import { SidebarProvider } from './components/ui/sidebar'
 import { TooltipProvider } from './components/ui/tooltip'
 import { ThemeProvider } from './components/theme/ThemeProvider'
 import DirectMessagesPage from './Pages/DirectMessagesPage/DirectMessagesPage'
-import DirectChatPage from './Pages/DirectMessagesPage/{id}/DirectChatPage'
+import DirectChatPage from './Pages/DirectMessagesPage/id/DirectChatPage'
 
 const router = createBrowserRouter(
   createRoutesFromElements(

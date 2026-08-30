@@ -14,7 +14,23 @@ const getAllDirectChatsForUser = async(): Promise<Response> => {
     }
 }
 
-const createDirectChat = async(userId: string): Promise<Response> => {
+const getDirectChatById = async(directChatId: string): Promise<Response> => {
+    try {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/direct-chats/${directChatId}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+        })
+        return response;
+    } catch (error) {
+        console.error("Error fetching direct chat by ID:", error)
+        throw error
+    }
+}
+
+const getOrCreateDirectChat = async(userId: string): Promise<Response> => {
     try {
         const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/direct-chats`, {
             method: "POST",
@@ -33,5 +49,6 @@ const createDirectChat = async(userId: string): Promise<Response> => {
 
 export const DirectChatService = {
     getAllDirectChatsForUser,
-    createDirectChat,
+    getDirectChatById,
+    getOrCreateDirectChat,
 }

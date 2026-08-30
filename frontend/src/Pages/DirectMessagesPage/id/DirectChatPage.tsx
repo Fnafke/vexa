@@ -1,10 +1,13 @@
 import SidebarComponent from "@/components/SidebarComponent";
 import ChatsSidebar from "@/components/social/ChatsSidebar";
 import { SidebarInset } from "@/components/ui/sidebar";
+import type { DirectChat } from "@/types/types";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 
 const DirectChatPage = () => {
     const { id } = useParams();
+    const [directChat, setDirectChat] = useState<DirectChat | null>(null);
 
     return (
             <>

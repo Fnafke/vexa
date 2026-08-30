@@ -102,7 +102,7 @@ const FriendListDisplay = ({ className, fullHeight = false }: FriendListDisplayP
         setErrorMessage("");
 
         try {
-            const response = await DirectChatService.createDirectChat(friendUser.id);
+            const response = await DirectChatService.getOrCreateDirectChat(friendUser.id);
             if (response.ok) {
                 const directChat: DirectChat = await response.json();
                 navigate(`/direct-messages/${directChat.id}`);
