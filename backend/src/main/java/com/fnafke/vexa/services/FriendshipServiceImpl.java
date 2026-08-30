@@ -130,15 +130,13 @@ public class FriendshipServiceImpl implements FriendshipService {
                     // Swap requester and addressee to allow the sender to send a new request
                     existingFriendship.setRequester(userA);
                     existingFriendship.setAddressee(userB);
-                    friendshipRepository.save(existingFriendship);
-                    return existingFriendship;
+                    return friendshipRepository.save(existingFriendship);
                 }
             }
         }
 
         Friendship friendship = new Friendship(userA, userB);
-        friendshipRepository.save(friendship);
-        return friendship;
+        return friendshipRepository.save(friendship);
     }
 
     @Override
@@ -151,8 +149,7 @@ public class FriendshipServiceImpl implements FriendshipService {
             throw new IllegalArgumentException("Friend request is not pending.");
         }
         friendship.setStatus(FriendshipStatus.ACCEPTED);
-        friendshipRepository.save(friendship);
-        return friendship;
+        return friendshipRepository.save(friendship);
     }
 
     @Override
@@ -165,8 +162,7 @@ public class FriendshipServiceImpl implements FriendshipService {
             throw new IllegalArgumentException("Friend request is not pending.");
         }
         friendship.setStatus(FriendshipStatus.DECLINED);
-        friendshipRepository.save(friendship);
-        return friendship;
+        return friendshipRepository.save(friendship);
     }
 
     @Override

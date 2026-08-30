@@ -38,9 +38,7 @@ public class BlockedUserServiceImpl implements BlockedUserService {
     public BlockedUser blockUser(User blocker, User blocked) {
 
         BlockedUser blockedUser = new BlockedUser(blocker, blocked);
-        blockedUserRepository.save(blockedUser);
-
-        return blockedUser;
+        return blockedUserRepository.save(blockedUser);
     }
 
     @Override
