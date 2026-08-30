@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 const userData: User = await response.json();
                 setUser(userData);
             } else {
-                setUser(null);
+                logout();
             }
         } catch {
             setUser(null);
