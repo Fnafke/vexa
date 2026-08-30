@@ -214,6 +214,7 @@ const FriendListDisplay = ({ className, fullHeight = false }: FriendListDisplayP
                                         currentUsername={currentUsername}
                                         label={`Request sent`}
                                         updatedAt={friend.updatedAt}
+                                        onCancel={() => handleDeclineRequest(friend.id)}
                                     />
                                 ))}
                             </ul>
