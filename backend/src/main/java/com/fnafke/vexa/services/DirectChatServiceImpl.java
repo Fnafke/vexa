@@ -1,6 +1,7 @@
 package com.fnafke.vexa.services;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,27 @@ public class DirectChatServiceImpl implements DirectChatService {
         return directChatRepository.findBetweenUsers(user1Id, user2Id)
                 .orElseThrow(() -> new RuntimeException(
                         "Direct chat not found between users: " + user1Id + " and " + user2Id));
+    }
+
+    @Override
+    public DirectChat getOrCreateDirectChat(UUID currentUserId, UUID friendId) {
+        if (currentUserId.equals(friendId)) {
+            throw new IllegalArgumentException("Cannot start a chat with yourself");
+        }
+
+        // Order the pair consistently, same convention as the DB constraint expects
+        UUID userOneId = currentUserId.compareTo(friendId) < 0 ? currentUserId : friendId;
+        UUID userTwoId = currentUserId.compareTo(friendId) < 0 ? friendId : currentUserId;
+
+        Optional<DirectChat> existing = directChatRepository.findBetweenUsers(userOneId, userTwoId);
+        if (existing.isPresent()) {
+            return existing.get();
+        }
+
+        User userOne = userService.findById(userOneId);
+        User userTwo = userService.findById(userTwoId);
+        DirectChat newChat = new DirectChat(userOne, userTwo);
+        return directChatRepository.save(newChat);
     }
 
     @Override

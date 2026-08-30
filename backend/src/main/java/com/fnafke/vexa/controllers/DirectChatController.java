@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fnafke.vexa.controllers.dto.chat.CreateDirectChatDto;
+import com.fnafke.vexa.controllers.dto.chat.GetOrCreateDirectChatDto;
 import com.fnafke.vexa.controllers.dto.chat.DirectChatDto;
 import com.fnafke.vexa.models.User;
 import com.fnafke.vexa.services.interfaces.DirectChatService;
@@ -56,10 +56,10 @@ public class DirectChatController {
     // /api/direct-chats - Create a new direct chat between the authenticated user
     // and another user
     @PostMapping()
-    public ResponseEntity<DirectChatDto> createDirectChat(@AuthenticationPrincipal User currentUser,
-            @RequestBody CreateDirectChatDto request) {
+    public ResponseEntity<DirectChatDto> getOrCreateDirectChat(@AuthenticationPrincipal User currentUser,
+            @RequestBody GetOrCreateDirectChatDto request) {
         DirectChatDto directChatDto = DirectChatDto.fromDirectChat(
-                directChatService.createDirectChat(currentUser.getId(), request.userId()));
+                directChatService.getOrCreateDirectChat(currentUser.getId(), request.userId()));
         return ResponseEntity.created(null).body(directChatDto);
     }
 }

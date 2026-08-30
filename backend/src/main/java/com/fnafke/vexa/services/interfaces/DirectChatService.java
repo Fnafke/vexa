@@ -43,6 +43,17 @@ public interface DirectChatService {
     DirectChat getDirectChatBetweenUsers(UUID user1Id, UUID user2Id);
 
     /**
+     * Get or create a direct chat between two users. If a direct chat already
+     * exists between the two users, it will be returned. If not, a new direct chat
+     * will be created and returned.
+     * 
+     * @param currentUserId
+     * @param friendId
+     * @return
+     */
+    DirectChat getOrCreateDirectChat(UUID currentUserId, UUID friendId);
+
+    /**
      * Create a new direct chat between two users.
      * 
      * @param user1Id The ID of the first user.
