@@ -1,6 +1,6 @@
 package com.fnafke.vexa.controllers.dto;
 
-import java.time.LocalDate;
+import java.time.Instant;
 import java.util.UUID;
 
 import com.fnafke.vexa.models.User;
@@ -10,7 +10,7 @@ public record UserDto(
         String username,
         String email,
         String role,
-        LocalDate createdAt) {
+        Instant createdAt) {
     public UserDto(User user) {
         this(
                 user.getId(),

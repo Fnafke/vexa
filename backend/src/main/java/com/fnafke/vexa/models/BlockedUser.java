@@ -1,6 +1,6 @@
 package com.fnafke.vexa.models;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -29,11 +29,11 @@ public class BlockedUser {
     private User blocked;
 
     @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     @PrePersist
     protected void onCreate() {
-        createdAt = LocalDateTime.now();
+        createdAt = Instant.now();
     }
 
     protected BlockedUser() {
@@ -56,8 +56,24 @@ public class BlockedUser {
         return blocked;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public void setBlocker(User blocker) {
+        this.blocker = blocker;
+    }
+
+    public void setBlocked(User blocked) {
+        this.blocked = blocked;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
     }
 
     @Override

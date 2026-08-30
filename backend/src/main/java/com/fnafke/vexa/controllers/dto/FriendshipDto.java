@@ -1,6 +1,6 @@
 package com.fnafke.vexa.controllers.dto;
 
-import java.time.LocalDate;
+import java.time.Instant;
 import java.util.UUID;
 
 import com.fnafke.vexa.models.Friendship;
@@ -11,7 +11,7 @@ public record FriendshipDto(
         PublicUserDto requester,
         PublicUserDto addressee,
         FriendshipStatus status,
-        LocalDate createdAt) {
+        Instant createdAt) {
     public static FriendshipDto fromFriendship(
             Friendship friendship) {
         return new FriendshipDto(
