@@ -171,7 +171,11 @@ public class FriendshipServiceImpl implements FriendshipService {
         if (friendship == null) {
             throw new IllegalArgumentException("There is no friendship with the provided ID.");
         }
-        friendshipRepository.delete(friendship);
+        if (friendship.getStatus() != FriendshipStatus.ACCEPTED) {
+            throw new IllegalArgumentException("Cannot remove a friendship that is not accepted.");
+        }
+        friendship.setStatus(FriendshipStatus.DECLINED);
+        friendshipRepository.save(friendship);
     }
 
     @Override

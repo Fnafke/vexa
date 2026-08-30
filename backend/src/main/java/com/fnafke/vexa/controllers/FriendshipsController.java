@@ -18,6 +18,7 @@ import com.fnafke.vexa.controllers.dto.friendship.DeclineFriendRequestDto;
 import com.fnafke.vexa.controllers.dto.friendship.FriendRequestDto;
 import com.fnafke.vexa.controllers.dto.friendship.FriendsListDto;
 import com.fnafke.vexa.controllers.dto.friendship.FriendshipDto;
+import com.fnafke.vexa.controllers.dto.friendship.RemoveFriendDto;
 import com.fnafke.vexa.models.FriendshipStatus;
 import com.fnafke.vexa.models.User;
 import com.fnafke.vexa.services.interfaces.FriendshipService;
@@ -97,5 +98,16 @@ public class FriendshipsController {
                 this.friendshipService.declineFriendRequest(declineFriendRequestDto.friendshipId()));
 
         return ResponseEntity.status(201).body(friendshipDto);
+    }
+
+    // /api/friendships/request/remove
+    @PostMapping("/request/remove")
+    public ResponseEntity<Void> removeFriendship(
+            @AuthenticationPrincipal User currentUser,
+            @RequestBody RemoveFriendDto removeFriendDto) {
+
+        this.friendshipService.removeFriendship(removeFriendDto.friendshipId());
+
+        return ResponseEntity.noContent().build();
     }
 }
