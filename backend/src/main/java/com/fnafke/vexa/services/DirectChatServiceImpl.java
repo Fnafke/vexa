@@ -28,7 +28,7 @@ public class DirectChatServiceImpl implements DirectChatService {
 
     @Override
     public List<DirectChat> getDirectChatsByUserId(UUID userId) {
-        return directChatRepository.findByUserId(userId);
+        return directChatRepository.findByUserIdOrderByUpdatedAtDesc(userId);
     }
 
     @Override
