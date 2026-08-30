@@ -3,7 +3,7 @@ export type User = {
     username: string;
     email: string;
     role: Role;
-    createdAt: Date;
+    createdAt: string;
 }
 
 export type AuthenticationRequest = {
@@ -27,7 +27,7 @@ export type SignupRequest = {
 export type PublicUser = {
     id: string;
     username: string;
-    createdAt: Date;
+    createdAt: string;
 }
 
 export type Friendship = {
@@ -35,7 +35,7 @@ export type Friendship = {
     requester: PublicUser;
     addressee: PublicUser;
     status: FriendshipStatus;
-    createdAt: Date;
+    createdAt: string;
 }
 
 export type FriendList = {

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Clock, UserRound } from "lucide-react";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { parseInstant, timeAgo } from "@/utils/utils";
 
 type FriendListDisplayProps = {
     className?: string;
@@ -182,7 +183,7 @@ const FriendListDisplay = ({ className, fullHeight = false }: FriendListDisplayP
                                         key={friend.id}
                                         friend={friend}
                                         currentUsername={currentUsername}
-                                        label="Request received"
+                                        label={`Request received ${timeAgo(parseInstant(friend.createdAt))}`}
                                     />
                                 ))}
                             </ul>
@@ -205,7 +206,7 @@ const FriendListDisplay = ({ className, fullHeight = false }: FriendListDisplayP
                                         key={friend.id}
                                         friend={friend}
                                         currentUsername={currentUsername}
-                                        label="Request sent"
+                                        label={`Request sent ${timeAgo(parseInstant(friend.createdAt))}`}
                                     />
                                 ))}
                             </ul>
