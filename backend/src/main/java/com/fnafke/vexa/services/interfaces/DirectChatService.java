@@ -24,6 +24,16 @@ public interface DirectChatService {
     DirectChat getDirectChatById(UUID directChatId);
 
     /**
+     * Get a direct chat by its ID and the user ID of one of the participants.
+     * 
+     * @param directChatId The ID of the direct chat to be retrieved.
+     * @param userId       The ID of one of the users in the direct chat.
+     * @return The DirectChat object with the specified ID if the user is a
+     *         participant.
+     */
+    DirectChat getDirectChatByIdAndUserId(UUID directChatId, UUID userId);
+
+    /**
      * Get a direct chat between two users by their user IDs.
      * 
      * @param user1Id The ID of the first user.

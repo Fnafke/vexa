@@ -38,6 +38,13 @@ public class DirectChatServiceImpl implements DirectChatService {
     }
 
     @Override
+    public DirectChat getDirectChatByIdAndUserId(UUID directChatId, UUID userId) {
+        return directChatRepository.findByIdAndUserId(directChatId, userId)
+                .orElseThrow(() -> new RuntimeException(
+                        "Direct chat not found with ID: " + directChatId + " for user ID: " + userId));
+    }
+
+    @Override
     public DirectChat getDirectChatBetweenUsers(UUID user1Id, UUID user2Id) {
         return directChatRepository.findBetweenUsers(user1Id, user2Id)
                 .orElseThrow(() -> new RuntimeException(

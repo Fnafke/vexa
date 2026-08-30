@@ -25,4 +25,9 @@ public interface DirectChatRepository extends JpaRepository<DirectChat, UUID> {
                         "dc.userOne.id = :userId OR dc.userTwo.id = :userId " +
                         "ORDER BY dc.updatedAt DESC")
         List<DirectChat> findByUserIdOrderByUpdatedAtDesc(UUID userId);
+
+        @Query("SELECT dc FROM DirectChat dc WHERE " +
+                        "dc.id = :directChatId AND " +
+                        "(dc.userOne.id = :userId OR dc.userTwo.id = :userId)")
+        Optional<DirectChat> findByIdAndUserId(UUID directChatId, UUID userId);
 }
