@@ -21,6 +21,7 @@ const router = createBrowserRouter(
       <Route element={<RequireAuth />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/direct-messages" element={<DirectMessagesPage />} />
+        <Route path="/direct-messages/:chatId" element={<DirectMessagesPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </>

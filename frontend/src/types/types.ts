@@ -47,6 +47,30 @@ export type FriendList = {
     totalPages: number;
 }
 
+export type DirectChat = {
+    id: string;
+    userOne: PublicUser;
+    userTwo: PublicUser;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export type Message = {
+    id: string;
+    sender: PublicUser;
+    content: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export type MessageList = {
+    messages: Message[];
+    page: number;
+    pageSize: number;
+    totalElements: number;
+    totalPages: number;
+}
+
 export type Role = "USER" | "ADMIN"
 
 export type FriendshipStatus = "PENDING" | "ACCEPTED" | "DECLINED"

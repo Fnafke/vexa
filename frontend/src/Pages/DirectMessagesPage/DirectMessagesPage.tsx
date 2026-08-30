@@ -1,5 +1,6 @@
 import SidebarComponent from "@/components/SidebarComponent";
 import AddAFriendForm from "@/components/social/AddAFriendForm";
+import ChatsSidebar from "@/components/social/ChatsSidebar";
 import FriendListDisplay from "@/components/social/FriendListDisplay";
 import { SidebarInset } from "@/components/ui/sidebar";
 
@@ -9,9 +10,12 @@ const DirectMessagesPage = () => {
             <title>Vexa - Direct Messages</title>
             <SidebarComponent />
             <SidebarInset className="min-h-svh p-4 md:p-6">
-                <div className="flex min-h-0 w-full flex-1 flex-col gap-4">
-                    <AddAFriendForm />
-                    <FriendListDisplay className="flex-1" fullHeight />
+                <div className="flex min-h-0 w-full flex-1 flex-col gap-4 lg:flex-row">
+                    <ChatsSidebar className="lg:h-[calc(100svh-3rem)]" />
+                    <div className="flex min-h-0 flex-1 flex-col gap-4">
+                        <AddAFriendForm />
+                        <FriendListDisplay className="flex-1" fullHeight />
+                    </div>
                 </div>
             </SidebarInset>
         </>
