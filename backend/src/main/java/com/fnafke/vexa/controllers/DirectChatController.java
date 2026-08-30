@@ -34,13 +34,10 @@ public class DirectChatController {
     public ResponseEntity<List<DirectChatDto>> getAllDirectChatsForUser(@AuthenticationPrincipal User currentUser) {
         List<DirectChatDto> directChats = directChatService.getDirectChatsByUserId(currentUser.getId())
                 .stream()
-                .map(directChat -> DirectChatDto.fromDirectChat(directChat, currentUser.getId()))
+                .map(directChat -> DirectChatDto.fromDirectChat(directChat))
                 .toList();
         return ResponseEntity.ok(directChats);
-
     }
-
-    // /api/direct-chats/{directChatId} - Get a specific direct chat by its ID
 
     // POST Requests
 
@@ -50,8 +47,7 @@ public class DirectChatController {
     public ResponseEntity<DirectChatDto> createDirectChat(@AuthenticationPrincipal User currentUser,
             @RequestBody CreateDirectChatDto request) {
         DirectChatDto directChatDto = DirectChatDto.fromDirectChat(
-                directChatService.createDirectChat(currentUser.getId(), request.userId()),
-                currentUser.getId());
+                directChatService.createDirectChat(currentUser.getId(), request.userId()));
         return ResponseEntity.created(null).body(directChatDto);
     }
 }

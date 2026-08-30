@@ -8,17 +8,16 @@ import com.fnafke.vexa.models.DirectChat;
 
 public record DirectChatDto(
         UUID id,
-        PublicUserDto user,
+        PublicUserDto userOne,
+        PublicUserDto userTwo,
         Instant createdAt,
         Instant updatedAt) {
     public static DirectChatDto fromDirectChat(
-            DirectChat directChat, UUID currentUserId) {
-        PublicUserDto userDto = directChat.getUserOne().getId().equals(currentUserId)
-                ? PublicUserDto.fromUser(directChat.getUserTwo())
-                : PublicUserDto.fromUser(directChat.getUserOne());
+            DirectChat directChat) {
         return new DirectChatDto(
                 directChat.getId(),
-                userDto,
+                PublicUserDto.fromUser(directChat.getUserOne()),
+                PublicUserDto.fromUser(directChat.getUserTwo()),
                 directChat.getCreatedAt(),
                 directChat.getUpdatedAt());
     }
