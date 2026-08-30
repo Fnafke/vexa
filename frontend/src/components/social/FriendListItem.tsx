@@ -11,9 +11,10 @@ type FriendListItemProps = {
     onAccept?: () => void;
     onDecline?: () => void;
     onCancel?: () => void;
+    onRemove?: () => void;
 }
 
-const FriendListItem = ({ friend, currentUsername, label, updatedAt, onAccept, onDecline, onCancel }: FriendListItemProps) => {
+const FriendListItem = ({ friend, currentUsername, label, updatedAt, onAccept, onDecline, onCancel, onRemove }: FriendListItemProps) => {
     const displayName = friend.requester.username === currentUsername
         ? friend.addressee.username
         : friend.requester.username;
@@ -56,6 +57,17 @@ const FriendListItem = ({ friend, currentUsername, label, updatedAt, onAccept, o
                             variant="destructive"
                         >
                             Cancel
+                        </Button>
+                    </div>
+                )}
+                {onRemove && (
+                    <div className="mt-2">
+                        <Button
+                            className="text-xs text-red-500 hover:text-red-600 cursor-pointer"
+                            onClick={onRemove}
+                            variant="destructive"
+                        >
+                            Remove
                         </Button>
                     </div>
                 )}

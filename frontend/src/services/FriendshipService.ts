@@ -67,9 +67,27 @@ const declineFriendRequest = async (friendshipId: string): Promise<Response> => 
     }
 }
 
+const removeFriend = async (friendshipId: string): Promise<Response> => {
+    try {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/friendships/request/remove`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({ friendshipId }),
+        })
+        return response;
+    } catch (error) {
+        console.error("Error removing friend:", error)
+        throw error
+    }
+}
+
 export const FriendshipService = {
     getFriendListByStatus,
     sendFriendRequest,
     acceptFriendRequest,
     declineFriendRequest,
+    removeFriend,
 }

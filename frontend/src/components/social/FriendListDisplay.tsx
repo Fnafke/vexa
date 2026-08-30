@@ -71,6 +71,21 @@ const FriendListDisplay = ({ className, fullHeight = false }: FriendListDisplayP
         }
     }
 
+    const handleRemoveFriend = async (friendshipId: string) => {
+        try {
+            const response = await FriendshipService.removeFriend(friendshipId);
+            if (response.ok) {
+                fetchFriendsList(activeStatus);
+            } else {
+                console.error("Failed to remove friend:", response.statusText);
+                setErrorMessage("Could not remove the friend right now.");
+            }
+        } catch (error) {
+            console.error("Error removing friend:", error);
+            setErrorMessage("Something went wrong while removing the friend.");
+        }
+    }
+
     useEffect(() => {
         fetchFriendsList(activeStatus);
     }, [activeStatus, fetchFriendsList]);
@@ -167,6 +182,7 @@ const FriendListDisplay = ({ className, fullHeight = false }: FriendListDisplayP
                             currentUsername={currentUsername}
                             label="Friend"
                             updatedAt={friend.updatedAt}
+                            onRemove={() => handleRemoveFriend(friend.id)}
                         />
                     ))}
                 </ul>
