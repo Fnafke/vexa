@@ -1,5 +1,5 @@
 import { FriendshipService } from "@/services/FriendshipService";
-import type { FriendList, FriendshipStatus } from "@/types/types";
+import type { FriendList, Friendship, FriendshipStatus } from "@/types/types";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Clock, UserRound } from "lucide-react";
@@ -9,6 +9,34 @@ import { AuthContext } from "../context/AuthContext";
 type FriendListDisplayProps = {
     className?: string;
     fullHeight?: boolean;
+}
+
+type FriendListItemProps = {
+    friend: Friendship;
+    currentUsername?: string;
+    label: string;
+}
+
+const FriendListItem = ({ friend, currentUsername, label }: FriendListItemProps) => {
+    const displayName = friend.requester.username === currentUsername
+        ? friend.addressee.username
+        : friend.requester.username;
+
+    return (
+        <li
+            className="flex items-center gap-3 rounded-lg border border-border bg-background p-3 transition-colors hover:bg-muted/35"
+        >
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary ring-1 ring-primary/15">
+                <UserRound className="h-5 w-5" />
+            </div>
+            <div className="min-w-0">
+                <p className="truncate text-sm font-semibold text-foreground">{displayName}</p>
+                <p className="text-xs text-muted-foreground">
+                    {label}
+                </p>
+            </div>
+        </li>
+    );
 }
 
 const FriendListDisplay = ({ className, fullHeight = false }: FriendListDisplayProps) => {
@@ -44,8 +72,15 @@ const FriendListDisplay = ({ className, fullHeight = false }: FriendListDisplayP
         fetchFriendsList(activeStatus);
     }, [activeStatus, fetchFriendsList]);
 
+    const currentUsername = context?.user?.username;
     const friends = friendsList?.friends ?? [];
     const isPendingView = activeStatus === "PENDING";
+    const sentRequests = isPendingView
+        ? friends.filter((friend) => friend.requester.username === currentUsername)
+        : [];
+    const receivedRequests = isPendingView
+        ? friends.filter((friend) => friend.requester.username !== currentUsername)
+        : [];
     const title = isPendingView ? "Pending requests" : "Friends";
     const description = friendsList
         ? `${friendsList.totalElements} ${isPendingView ? "pending" : "connected"}`
@@ -120,29 +155,67 @@ const FriendListDisplay = ({ className, fullHeight = false }: FriendListDisplayP
                 </div>
             )}
 
-            {!isLoading && !errorMessage && friends.length > 0 && (
+            {!isLoading && !errorMessage && !isPendingView && friends.length > 0 && (
                 <ul className={cn("space-y-2", fullHeight && "min-h-0 flex-1 overflow-auto pr-1")}>
                     {friends.map((friend) => (
-                        <li
+                        <FriendListItem
                             key={friend.id}
-                            className="flex items-center gap-3 rounded-lg border border-border bg-background p-3 transition-colors hover:bg-muted/35"
-                        >
-                            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary ring-1 ring-primary/15">
-                                <UserRound className="h-5 w-5" />
-                            </div>
-                            <div className="min-w-0">
-                                <p className="truncate text-sm font-semibold text-foreground">{
-                                    friend.requester.username === context?.user?.username ? friend.addressee.username : friend.requester.username
-                                }</p>
-                                <p className="text-xs text-muted-foreground">
-                                    {isPendingView
-                                        ? friend.requester.username === context?.user?.username ? "Request sent" : "Request received"
-                                        : "Friend"}
-                                </p>
-                            </div>
-                        </li>
+                            friend={friend}
+                            currentUsername={currentUsername}
+                            label="Friend"
+                        />
                     ))}
                 </ul>
+            )}
+
+            {!isLoading && !errorMessage && isPendingView && friends.length > 0 && (
+                <div className={cn("space-y-5", fullHeight && "min-h-0 flex-1 overflow-auto pr-1")}>
+                    <section>
+                        <div className="mb-2 flex items-center gap-3">
+                            <h3 className="text-sm font-semibold text-foreground">Requests received</h3>
+                            <span className="text-xs font-medium text-muted-foreground">{receivedRequests.length}</span>
+                        </div>
+                        {receivedRequests.length > 0 ? (
+                            <ul className="space-y-2">
+                                {receivedRequests.map((friend) => (
+                                    <FriendListItem
+                                        key={friend.id}
+                                        friend={friend}
+                                        currentUsername={currentUsername}
+                                        label="Request received"
+                                    />
+                                ))}
+                            </ul>
+                        ) : (
+                            <p className="rounded-lg border border-dashed border-border bg-muted/20 px-3 py-3 text-sm text-muted-foreground">
+                                No requests received.
+                            </p>
+                        )}
+                    </section>
+
+                    <section>
+                        <div className="mb-2 flex items-center gap-3">
+                            <h3 className="text-sm font-semibold text-foreground">Requests sent</h3>
+                            <span className="text-xs font-medium text-muted-foreground">{sentRequests.length}</span>
+                        </div>
+                        {sentRequests.length > 0 ? (
+                            <ul className="space-y-2">
+                                {sentRequests.map((friend) => (
+                                    <FriendListItem
+                                        key={friend.id}
+                                        friend={friend}
+                                        currentUsername={currentUsername}
+                                        label="Request sent"
+                                    />
+                                ))}
+                            </ul>
+                        ) : (
+                            <p className="rounded-lg border border-dashed border-border bg-muted/20 px-3 py-3 text-sm text-muted-foreground">
+                                No requests sent.
+                            </p>
+                        )}
+                    </section>
+                </div>
             )}
         </section>
     )
