@@ -34,7 +34,8 @@ public class MessageController {
 
     // GET Requests
 
-    // /api/chats/{chatId}/messages - Get all messages for a specific chat
+    // /api/chats/{chatId}/messages?page={0}&size={10} - Get all messages for a
+    // specific chat
     @GetMapping
     public MessageListDto getMessages(
             @AuthenticationPrincipal User currentUser,
