@@ -36,6 +36,7 @@ export type Friendship = {
     addressee: PublicUser;
     status: FriendshipStatus;
     createdAt: string;
+    updatedAt: string;
 }
 
 export type FriendList = {

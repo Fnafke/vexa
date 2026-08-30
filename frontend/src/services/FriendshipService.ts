@@ -33,7 +33,43 @@ const sendFriendRequest = async (receiverUsername: string): Promise<Response> =>
     }
 }
 
+const acceptFriendRequest = async (friendshipId: string): Promise<Response> => {
+    try {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/friendships/request/accept`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({ friendshipId }),
+        })
+        return response;
+    } catch (error) {
+        console.error("Error accepting friend request:", error)
+        throw error
+    }
+}
+
+const declineFriendRequest = async (friendshipId: string): Promise<Response> => {
+    try {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/friendships/request/decline`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({ friendshipId }),
+        })
+        return response;
+    } catch (error) {
+        console.error("Error declining friend request:", error)
+        throw error
+    }
+}
+
 export const FriendshipService = {
     getFriendListByStatus,
     sendFriendRequest,
+    acceptFriendRequest,
+    declineFriendRequest,
 }

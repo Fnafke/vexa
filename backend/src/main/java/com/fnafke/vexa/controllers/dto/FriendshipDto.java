@@ -11,7 +11,8 @@ public record FriendshipDto(
         PublicUserDto requester,
         PublicUserDto addressee,
         FriendshipStatus status,
-        Instant createdAt) {
+        Instant createdAt,
+        Instant updatedAt) {
     public static FriendshipDto fromFriendship(
             Friendship friendship) {
         return new FriendshipDto(
@@ -19,6 +20,7 @@ public record FriendshipDto(
                 PublicUserDto.fromUser(friendship.getRequester()),
                 PublicUserDto.fromUser(friendship.getAddressee()),
                 friendship.getStatus(),
-                friendship.getCreatedAt());
+                friendship.getCreatedAt(),
+                friendship.getUpdatedAt());
     }
 }

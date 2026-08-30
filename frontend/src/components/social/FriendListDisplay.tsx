@@ -1,43 +1,15 @@
 import { FriendshipService } from "@/services/FriendshipService";
-import type { FriendList, Friendship, FriendshipStatus } from "@/types/types";
+import type { FriendList, FriendshipStatus } from "@/types/types";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Clock, UserRound } from "lucide-react";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { parseInstant, timeAgo } from "@/utils/utils";
+import FriendListItem from "./FriendListItem";
 
 type FriendListDisplayProps = {
     className?: string;
     fullHeight?: boolean;
-}
-
-type FriendListItemProps = {
-    friend: Friendship;
-    currentUsername?: string;
-    label: string;
-}
-
-const FriendListItem = ({ friend, currentUsername, label }: FriendListItemProps) => {
-    const displayName = friend.requester.username === currentUsername
-        ? friend.addressee.username
-        : friend.requester.username;
-
-    return (
-        <li
-            className="flex items-center gap-3 rounded-lg border border-border bg-background p-3 transition-colors hover:bg-muted/35"
-        >
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary ring-1 ring-primary/15">
-                <UserRound className="h-5 w-5" />
-            </div>
-            <div className="min-w-0">
-                <p className="truncate text-sm font-semibold text-foreground">{displayName}</p>
-                <p className="text-xs text-muted-foreground">
-                    {label}
-                </p>
-            </div>
-        </li>
-    );
 }
 
 const FriendListDisplay = ({ className, fullHeight = false }: FriendListDisplayProps) => {
@@ -68,6 +40,36 @@ const FriendListDisplay = ({ className, fullHeight = false }: FriendListDisplayP
             setIsLoading(false);
         }
     }, []);
+
+    const handleAcceptRequest = async (friendshipId: string) => {
+        try {
+            const response = await FriendshipService.acceptFriendRequest(friendshipId);
+            if (response.ok) {
+                fetchFriendsList(activeStatus);
+            } else {
+                console.error("Failed to accept friend request:", response.statusText);
+                setErrorMessage("Could not accept the friend request right now.");
+            }
+        } catch (error) {
+            console.error("Error accepting friend request:", error);
+            setErrorMessage("Something went wrong while accepting the friend request.");
+        }
+    };
+
+    const handleDeclineRequest = async (friendshipId: string) => {
+        try {
+            const response = await FriendshipService.declineFriendRequest(friendshipId);
+            if (response.ok) {
+                fetchFriendsList(activeStatus);
+            } else {
+                console.error("Failed to decline friend request:", response.statusText);
+                setErrorMessage("Could not decline the friend request right now.");
+            }
+        } catch (error) {
+            console.error("Error declining friend request:", error);
+            setErrorMessage("Something went wrong while declining the friend request.");
+        }
+    }
 
     useEffect(() => {
         fetchFriendsList(activeStatus);
@@ -164,6 +166,7 @@ const FriendListDisplay = ({ className, fullHeight = false }: FriendListDisplayP
                             friend={friend}
                             currentUsername={currentUsername}
                             label="Friend"
+                            updatedAt={friend.updatedAt}
                         />
                     ))}
                 </ul>
@@ -183,7 +186,10 @@ const FriendListDisplay = ({ className, fullHeight = false }: FriendListDisplayP
                                         key={friend.id}
                                         friend={friend}
                                         currentUsername={currentUsername}
-                                        label={`Request received ${timeAgo(parseInstant(friend.createdAt))}`}
+                                        label={`Request received`}
+                                        updatedAt={friend.updatedAt}
+                                        onAccept={() => handleAcceptRequest(friend.id)}
+                                        onDecline={() => handleDeclineRequest(friend.id)}
                                     />
                                 ))}
                             </ul>
@@ -206,7 +212,8 @@ const FriendListDisplay = ({ className, fullHeight = false }: FriendListDisplayP
                                         key={friend.id}
                                         friend={friend}
                                         currentUsername={currentUsername}
-                                        label={`Request sent ${timeAgo(parseInstant(friend.createdAt))}`}
+                                        label={`Request sent`}
+                                        updatedAt={friend.updatedAt}
                                     />
                                 ))}
                             </ul>

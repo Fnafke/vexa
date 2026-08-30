@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fnafke.vexa.controllers.dto.AcceptFriendRequestDto;
 import com.fnafke.vexa.controllers.dto.BlockedListDto;
+import com.fnafke.vexa.controllers.dto.DeclineFriendRequestDto;
 import com.fnafke.vexa.controllers.dto.FriendRequestDto;
 import com.fnafke.vexa.controllers.dto.FriendsListDto;
 import com.fnafke.vexa.controllers.dto.FriendshipDto;
@@ -77,10 +79,10 @@ public class FriendshipsController {
     @PostMapping("/request/accept")
     public ResponseEntity<FriendshipDto> acceptFriendRequest(
             @AuthenticationPrincipal User currentUser,
-            @RequestBody UUID friendshipId) {
+            @RequestBody AcceptFriendRequestDto acceptFriendRequestDto) {
 
         FriendshipDto friendshipDto = FriendshipDto.fromFriendship(
-                this.friendshipService.acceptFriendRequest(friendshipId));
+                this.friendshipService.acceptFriendRequest(acceptFriendRequestDto.friendshipId()));
 
         return ResponseEntity.status(201).body(friendshipDto);
     }
@@ -89,10 +91,10 @@ public class FriendshipsController {
     @PostMapping("/request/decline")
     public ResponseEntity<FriendshipDto> declineFriendRequest(
             @AuthenticationPrincipal User currentUser,
-            @RequestBody UUID friendshipId) {
+            @RequestBody DeclineFriendRequestDto declineFriendRequestDto) {
 
         FriendshipDto friendshipDto = FriendshipDto.fromFriendship(
-                this.friendshipService.declineFriendRequest(friendshipId));
+                this.friendshipService.declineFriendRequest(declineFriendRequestDto.friendshipId()));
 
         return ResponseEntity.status(201).body(friendshipDto);
     }
