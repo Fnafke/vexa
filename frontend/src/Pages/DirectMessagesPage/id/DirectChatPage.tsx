@@ -1,3 +1,4 @@
+import { AuthContext } from "@/components/context/AuthContext";
 import SidebarComponent from "@/components/SidebarComponent";
 import ChatsSidebar from "@/components/social/ChatsSidebar";
 import DirectChatView from "@/components/social/DirectChatView";
@@ -6,7 +7,7 @@ import { DirectChatService } from "@/services/DirectChatService";
 import { MessageService } from "@/services/MessageService";
 import { WebSocketService } from "@/services/WebSocketService";
 import type { DirectChat, Message } from "@/types/types";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 const DirectChatPage = () => {
@@ -15,6 +16,8 @@ const DirectChatPage = () => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [draft, setDraft] = useState("");
+
+    const context = useContext(AuthContext);
 
     const fetchDirectChat = useCallback(async () => {
         if (!chatId) return;
@@ -96,6 +99,7 @@ const DirectChatPage = () => {
                         <DirectChatView
                             chat={chat}
                             messages={messages}
+                            currentUsername={context?.user?.username}
                             draft={draft}
                             onDraftChange={setDraft}
                             onSend={handleSend}
