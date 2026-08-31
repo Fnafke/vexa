@@ -4,6 +4,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { AuthContext } from "./AuthContext";
 import { AuthService } from "@/services/AuthService";
 import { UserService } from "@/services/UserService";
+import { WebSocketService } from "@/services/WebSocketService";
 
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -39,6 +40,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         fetchUserData();
     }, []);
+
+    useEffect(() => {
+        if (user) {
+            WebSocketService.connect();
+        } else {
+            WebSocketService.disconnect();
+        }
+    }, [user]);
 
     return (
         <AuthContext.Provider value={{ user, isLoading, login, logout }}>

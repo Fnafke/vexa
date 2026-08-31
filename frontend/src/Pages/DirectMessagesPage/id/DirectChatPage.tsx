@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom";
 const DirectChatPage = () => {
     const { id } = useParams();
     const [directChat, setDirectChat] = useState<DirectChat | null>(null);
+    
 
     return (
             <>
