@@ -4,7 +4,11 @@ import { Input } from "../ui/input";
 import { Check, Plus, UserPlus, X } from "lucide-react";
 import { FriendshipService } from "@/services/FriendshipService";
 
-const AddAFriendForm = () => {
+type AddAFriendFormProps = {
+    onFriendRequestSent?: () => void;
+};
+
+const AddAFriendForm = ({ onFriendRequestSent }: AddAFriendFormProps) => {
     const [showForm, setShowForm] = useState<boolean>(false);
     const [friendUsername, setFriendUsername] = useState<string>('');
     const [successMessage, setSuccessMessage] = useState<string>("");
@@ -24,6 +28,7 @@ const AddAFriendForm = () => {
             return;
         }
 
+        onFriendRequestSent?.();
         setSuccessMessage(`Friend request sent to ${friendUsername.trim()}!`);
         setFriendUsername("");
     };

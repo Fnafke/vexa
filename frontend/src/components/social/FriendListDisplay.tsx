@@ -12,10 +12,12 @@ import { useNavigate } from "react-router-dom";
 type FriendListDisplayProps = {
     className?: string;
     fullHeight?: boolean;
+    pendingRefreshKey?: number;
 }
 
-const FriendListDisplay = ({ className, fullHeight = false }: FriendListDisplayProps) => {
+const FriendListDisplay = ({ className, fullHeight = false, pendingRefreshKey }: FriendListDisplayProps) => {
     const [friendsList, setFriendsList] = useState<FriendList | null>(null);
+    const [pendingList, setPendingList] = useState<FriendList | null>(null);
     const [activeStatus, setActiveStatus] = useState<Extract<FriendshipStatus, "ACCEPTED" | "PENDING">>("ACCEPTED");
     const [isLoading, setIsLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState("");
@@ -24,32 +26,45 @@ const FriendListDisplay = ({ className, fullHeight = false }: FriendListDisplayP
     const context = useContext(AuthContext);
     const navigate = useNavigate();
 
-    const fetchFriendsList = useCallback(async (status: FriendshipStatus, page?: number, size?: number) => {
+    const fetchFriends = useCallback(async (page?: number, size?: number) => {
+        const response = await FriendshipService.getFriendListByStatus("ACCEPTED", page, size);
+        if (response.ok) {
+            setFriendsList(await response.json());
+            return true;
+        }
+        return false;
+    }, []);
+
+    const fetchPending = useCallback(async (page?: number, size?: number) => {
+        const response = await FriendshipService.getFriendListByStatus("PENDING", page, size);
+        if (response.ok) {
+            setPendingList(await response.json());
+            return true;
+        }
+        return false;
+    }, []);
+
+    const fetchAll = useCallback(async () => {
         setIsLoading(true);
         setErrorMessage("");
-
         try {
-            const response = await FriendshipService.getFriendListByStatus(status, page, size);
-            if (response.ok) {
-                const data: FriendList = await response.json();
-                setFriendsList(data);
-            } else {
-                console.error("Failed to fetch friends list:", response.statusText);
+            const [friendsOk, pendingOk] = await Promise.all([fetchFriends(), fetchPending()]);
+            if (!friendsOk || !pendingOk) {
                 setErrorMessage("Could not load your friends right now.");
             }
         } catch (error) {
-            console.error("Error fetching friends list:", error);
+            console.error("Error fetching friends data:", error);
             setErrorMessage("Something went wrong while loading your friends.");
         } finally {
             setIsLoading(false);
         }
-    }, []);
+    }, [fetchFriends, fetchPending]);
 
     const handleAcceptRequest = async (friendshipId: string) => {
         try {
             const response = await FriendshipService.acceptFriendRequest(friendshipId);
             if (response.ok) {
-                fetchFriendsList(activeStatus);
+                await Promise.all([fetchPending(), fetchFriends()]);
             } else {
                 console.error("Failed to accept friend request:", response.statusText);
                 setErrorMessage("Could not accept the friend request right now.");
@@ -64,7 +79,7 @@ const FriendListDisplay = ({ className, fullHeight = false }: FriendListDisplayP
         try {
             const response = await FriendshipService.declineFriendRequest(friendshipId);
             if (response.ok) {
-                fetchFriendsList(activeStatus);
+                await fetchPending();
             } else {
                 console.error("Failed to decline friend request:", response.statusText);
                 setErrorMessage("Could not decline the friend request right now.");
@@ -79,7 +94,7 @@ const FriendListDisplay = ({ className, fullHeight = false }: FriendListDisplayP
         try {
             const response = await FriendshipService.removeFriend(friendshipId);
             if (response.ok) {
-                fetchFriendsList(activeStatus);
+                await fetchFriends();
             } else {
                 console.error("Failed to remove friend:", response.statusText);
                 setErrorMessage("Could not remove the friend right now.");
@@ -119,11 +134,19 @@ const FriendListDisplay = ({ className, fullHeight = false }: FriendListDisplayP
     }
 
     useEffect(() => {
-        fetchFriendsList(activeStatus);
-    }, [activeStatus, fetchFriendsList]);
+        fetchAll();
+    }, [fetchAll]);
+
+    useEffect(() => {
+        if (pendingRefreshKey === undefined || pendingRefreshKey === 0) {
+            return;
+        }
+        fetchPending();
+    }, [pendingRefreshKey, fetchPending]);
 
     const currentUsername = context?.user?.username;
-    const friends = friendsList?.friends ?? [];
+    const activeList = activeStatus === "ACCEPTED" ? friendsList : pendingList;
+    const friends = activeList?.friends ?? [];
     const isPendingView = activeStatus === "PENDING";
     const sentRequests = isPendingView
         ? friends.filter((friend) => friend.requester.username === currentUsername)
