@@ -60,7 +60,7 @@ const ChatsSidebar = ({ className }: ChatsSidebarProps) => {
         >
             <section className="space-y-2">
                 <Button
-                    className="h-11 w-full justify-start gap-3"
+                    className="h-11 w-full justify-start gap-3 cursor-pointer"
                     onClick={() => navigate("/direct-messages")}
                     type="button"
                     variant={location.pathname === "/direct-messages" ? "default" : "ghost"}
@@ -121,7 +121,7 @@ const ChatsSidebar = ({ className }: ChatsSidebarProps) => {
                             return (
                                 <li key={chat.id}>
                                     <Button
-                                        className="h-12 w-full justify-start gap-3 px-2"
+                                        className="h-12 w-full justify-start gap-3 px-2 cursor-pointer"
                                         onClick={() => navigate(chatPath)}
                                         type="button"
                                         variant={location.pathname === chatPath ? "secondary" : "ghost"}
