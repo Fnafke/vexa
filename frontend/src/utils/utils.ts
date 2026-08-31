@@ -1,6 +1,19 @@
-export const parseInstant = (dateString: string): Date => new Date(dateString);
+const parseInstant = (dateString: string): Date => new Date(dateString);
 
-export const timeAgo = (date: Date): string => {
+const formatDate = (dateValue: string) => {
+        const date = parseInstant(dateValue);
+
+        if (Number.isNaN(date.getTime())) {
+            return dateValue;
+        }
+
+        return new Intl.DateTimeFormat(undefined, {
+            dateStyle: "long",
+            timeStyle: "short",
+        }).format(date);
+    };
+
+const timeAgo = (date: Date): string => {
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
     const diffSeconds = Math.floor(diffMs / 1000);
@@ -27,3 +40,9 @@ export const timeAgo = (date: Date): string => {
 
     return "just now";
 };
+
+export const Util = {
+    parseInstant,
+    timeAgo,
+    formatDate
+}

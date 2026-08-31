@@ -13,6 +13,7 @@ import { TooltipProvider } from './components/ui/tooltip'
 import { ThemeProvider } from './components/theme/ThemeProvider'
 import DirectMessagesPage from './Pages/DirectMessagesPage/DirectMessagesPage'
 import DirectChatPage from './Pages/DirectMessagesPage/id/DirectChatPage'
+import AccountPage from './Pages/AccountPage'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -21,6 +22,7 @@ const router = createBrowserRouter(
       <Route path="/signup" element={<SignupPage />} />
       <Route element={<RequireAuth />}>
         <Route path="/" element={<HomePage />} />
+        <Route path="/account" element={<AccountPage />} />
         <Route path="/direct-messages" element={<DirectMessagesPage />} />
         <Route path="/direct-messages/:chatId" element={<DirectChatPage />} />
         <Route path="*" element={<NotFoundPage />} />
